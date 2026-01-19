@@ -1,0 +1,52 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Routine {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  exercises RoutineExercise[]
+}
+
+model RoutineExercise {
+  id          String  @id @default(uuid())
+  routineId   String
+  routine     Routine @relation(fields: [routineId], references: [id])
+  name        String
+  order       Int
+  targetSets  Int
+  targetReps  Int
+}
+
+model Workout {
+  id        String   @id @default(uuid())
+  name      String
+  startedAt DateTime @default(now())
+  endedAt   DateTime?
+  exercises WorkoutExercise[]
+}
+
+model WorkoutExercise {
+  id        String   @id @default(uuid())
+  workoutId String
+  workout   Workout  @relation(fields: [workoutId], references: [id])
+  name      String
+  order     Int
+  sets      WorkoutSet[]
+}
+
+model WorkoutSet {
+  id                String          @id @default(uuid())
+  workoutExerciseId String
+  workoutExercise   WorkoutExercise @relation(fields: [workoutExerciseId], references: [id])
+  weight            Float
+  reps              Int
+  rir               Int?
+  completed         Boolean         @default(false)
+}
