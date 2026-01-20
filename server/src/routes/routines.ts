@@ -1,8 +1,7 @@
 import { Router, Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../db';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 // GET /: Include exercises ordered by order
 router.get('/', async (req: Request, res: Response) => {
@@ -67,8 +66,8 @@ router.post('/', async (req: Request, res: Response) => {
         exercises: {
           create: exercises?.map((e: any, index: number) => ({
             name: e.name,
-            targetSets: e.targetSets,
-            targetReps: e.targetReps,
+            targetSets: e.targetSets || 3,
+            targetReps: e.targetReps || 10,
             order: index,
           })) || [],
         },
@@ -115,8 +114,8 @@ router.put('/:id', async (req: Request, res: Response) => {
           exercises: {
             create: exercises?.map((e: any, index: number) => ({
               name: e.name,
-              targetSets: e.targetSets,
-              targetReps: e.targetReps,
+              targetSets: e.targetSets || 3,
+              targetReps: e.targetReps || 10,
               order: index,
             })) || [],
           },
