@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, FlatList, Button, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { fetchRoutines, createRoutine, Routine } from '../api/client';
+import { fetchRoutines, deleteRoutine, Routine } from '../api/client';
 import RoutineCard from '../components/RoutineCard';
 
 type RootStackParamList = {
   ActiveWorkout: { routine: Routine };
+  CreateRoutine: undefined;
+  EditRoutine: { routineId: string };
 };
 
 export default function HomeScreen() {
@@ -23,38 +25,62 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
-    loadRoutines();
-  }, []);
-
-  const handleCreateRoutine = async () => {
-    try {
-      const newRoutine = {
-        name: `New Routine ${routines.length + 1}`,
-        exercises: [{ name: 'Push-up' }, { name: 'Squat' }],
-      };
-      await createRoutine(newRoutine);
+    const unsubscribe = navigation.addListener('focus', () => {
       loadRoutines();
-    } catch (error) {
-      console.error('Failed to create routine:', error);
-    }
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  const handleCreateRoutine = () => {
+    navigation.navigate('CreateRoutine');
+  };
+
+  const handleEditRoutine = (id: string) => {
+    navigation.navigate('EditRoutine', { routineId: id });
+  };
+
+  const handleDeleteRoutine = async (id: string) => {
+    Alert.alert(
+      'Delete Routine',
+      'Are you sure you want to delete this routine?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Delete', 
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deleteRoutine(id);
+              loadRoutines();
+            } catch (error) {
+              console.error('Failed to delete routine:', error);
+              Alert.alert('Error', 'Failed to delete routine');
+            }
+          }
+        },
+      ]
+    );
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.controls}>
-        <Button title="Create Routine" onPress={handleCreateRoutine} />
-      </View>
       <FlatList
         data={routines}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <RoutineCard 
-            routine={item} 
-            onDelete={(id) => console.log('Delete', id)} 
+            routine={item}
+            onEdit={handleEditRoutine}
+            onDelete={handleDeleteRoutine} 
             onStart={(routine) => navigation.navigate('ActiveWorkout', { routine })}
           />
         )}
         contentContainerStyle={styles.list}
+        ListHeaderComponent={
+          <TouchableOpacity style={styles.createButton} onPress={handleCreateRoutine}>
+            <Text style={styles.createButtonText}>+ CREATE NEW ROUTINE</Text>
+          </TouchableOpacity>
+        }
       />
     </View>
   );
@@ -63,15 +89,25 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  controls: {
-    padding: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    backgroundColor: '#FFF',
   },
   list: {
-    padding: 16,
+    padding: 20,
+    paddingTop: 40,
+  },
+  createButton: {
+    borderWidth: 1,
+    borderColor: '#000',
+    borderStyle: 'dashed',
+    paddingVertical: 20,
+    borderRadius: 4,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  createButtonText: {
+    color: '#000',
+    fontSize: 14,
+    fontWeight: '800',
+    letterSpacing: 1,
   },
 });

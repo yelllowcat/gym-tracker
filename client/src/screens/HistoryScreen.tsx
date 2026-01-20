@@ -1,9 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { fetchWorkouts, Workout } from '../api/client';
 
+type RootStackParamList = {
+  WorkoutDetail: { workoutId: string };
+};
+
 export default function HistoryScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [workouts, setWorkouts] = useState<Workout[]>([]);
 
   useFocusEffect(
@@ -15,7 +21,6 @@ export default function HistoryScreen() {
   const loadWorkouts = async () => {
     try {
       const data = await fetchWorkouts();
-      // Sort by date descending
       data.sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
       setWorkouts(data);
     } catch (error) {
@@ -28,35 +33,42 @@ export default function HistoryScreen() {
     const endTime = new Date(end).getTime();
     const diffMs = endTime - startTime;
     const diffMins = Math.round(diffMs / 60000);
-    return `${diffMins} min`;
+    return `${diffMins} MIN`;
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
+    const date = new Date(dateString);
+    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
   };
 
   const renderItem = ({ item }: { item: Workout }) => (
     <TouchableOpacity 
         style={styles.card} 
-        onPress={() => console.log('Workout details:', item)}
+        onPress={() => navigation.navigate('WorkoutDetail', { workoutId: item.id })}
     >
-      <View style={styles.row}>
+      <View style={styles.cardHeader}>
         <Text style={styles.date}>{formatDate(item.startedAt)}</Text>
         <Text style={styles.duration}>{formatDuration(item.startedAt, item.endedAt)}</Text>
       </View>
-      <Text style={styles.name}>{item.name}</Text>
-      <Text style={styles.exercises}>{item.exercises.length} Exercises</Text>
+      <Text style={styles.name}>{item.name.toUpperCase()}</Text>
+      <Text style={styles.exercisesCount}>
+        {item._count?.exercises ?? item.exercises?.length ?? 0} EXERCISES COMPLETED
+      </Text>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>HISTORY</Text>
+      </View>
       <FlatList
         data={workouts}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         contentContainerStyle={styles.list}
-        ListEmptyComponent={<Text style={styles.emptyText}>No workouts recorded yet.</Text>}
+        ListEmptyComponent={<Text style={styles.emptyText}>NO WORKOUTS RECORDED YET.</Text>}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
@@ -65,49 +77,66 @@ export default function HistoryScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFF',
+  },
+  header: {
+    paddingHorizontal: 24,
+    paddingTop: 60,
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#D1D1D6',
+  },
+  headerTitle: {
+    fontSize: 16,
+    fontWeight: '900',
+    letterSpacing: 2,
+    color: '#000',
   },
   list: {
-    padding: 16,
+    padding: 24,
   },
   card: {
     backgroundColor: '#fff',
-    padding: 16,
-    marginBottom: 12,
-    borderRadius: 8,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    paddingVertical: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#D1D1D6',
+    marginBottom: 10,
   },
-  row: {
+  cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 8,
   },
   date: {
-    color: '#666',
-    fontSize: 14,
+    color: '#000',
+    fontSize: 12,
+    fontWeight: '800',
+    letterSpacing: 1,
   },
   duration: {
-    color: '#666',
-    fontSize: 14,
-    fontWeight: '500',
+    color: '#8E8E93',
+    fontSize: 11,
+    fontWeight: '700',
   },
   name: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 4,
+    fontSize: 20,
+    fontWeight: '900',
+    color: '#000',
+    marginBottom: 6,
+    letterSpacing: 0.5,
   },
-  exercises: {
-    color: '#888',
-    fontSize: 14,
+  exercisesCount: {
+    color: '#8E8E93',
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 0.5,
   },
   emptyText: {
     textAlign: 'center',
     marginTop: 40,
-    color: '#999',
-    fontSize: 16,
+    color: '#8E8E93',
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 1,
   }
 });

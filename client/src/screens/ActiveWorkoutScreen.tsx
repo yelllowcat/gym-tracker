@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, TextInput, TouchableOpacity, StyleSheet, ScrollView, Button, Alert } from 'react-native';
+import { View, Text, FlatList, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { saveWorkout, Routine } from '../api/client';
 
@@ -27,7 +27,6 @@ export default function ActiveWorkoutScreen() {
   const { routine } = route.params;
   const startTime = React.useRef(new Date()).current;
 
-  // Initialize exercises with one empty set each
   const [exercises, setExercises] = useState<WorkoutExercise[]>(
     routine.exercises.map(ex => ({
       name: ex.name,
@@ -78,58 +77,80 @@ export default function ActiveWorkoutScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>{routine.name}</Text>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>{routine.name.toUpperCase()}</Text>
+        <TouchableOpacity onPress={handleFinish}>
+          <Text style={styles.finishText}>FINISH</Text>
+        </TouchableOpacity>
+      </View>
+
       <FlatList
         data={exercises}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item: exercise, index: exerciseIndex }) => (
-          <View style={styles.exerciseCard}>
-            <Text style={styles.exerciseName}>{exercise.name}</Text>
-            <View style={styles.headerRow}>
-              <Text style={styles.colHeader}>W (kg)</Text>
-              <Text style={styles.colHeader}>Reps</Text>
-              <Text style={styles.colHeader}>RIR</Text>
-              <Text style={styles.colHeader}>Done</Text>
+          <View style={styles.exerciseSection}>
+            <Text style={styles.exerciseName}>{exercise.name.toUpperCase()}</Text>
+            
+            <View style={styles.gridHeader}>
+              <Text style={[styles.colLabel, { flex: 0.8 }]}>SET</Text>
+              <Text style={styles.colLabel}>KG</Text>
+              <Text style={styles.colLabel}>REPS</Text>
+              <Text style={styles.colLabel}>RIR</Text>
+              <Text style={[styles.colLabel, { flex: 0.8 }]}>DONE</Text>
             </View>
+
             {exercise.sets.map((set, setIndex) => (
-              <View key={setIndex} style={styles.setRow}>
+              <View key={setIndex} style={[styles.setRow, set.completed && styles.completedRow]}>
+                <Text style={[styles.setText, { flex: 0.8 }]}>{setIndex + 1}</Text>
+                
                 <TextInput
+                  placeholderTextColor="#D1D1D6"
                   style={styles.input}
                   placeholder="0"
                   keyboardType="numeric"
                   value={set.weight}
                   onChangeText={(text) => updateSet(exerciseIndex, setIndex, 'weight', text)}
                 />
+                
                 <TextInput
+                  placeholderTextColor="#D1D1D6"
                   style={styles.input}
                   placeholder="0"
                   keyboardType="numeric"
                   value={set.reps}
                   onChangeText={(text) => updateSet(exerciseIndex, setIndex, 'reps', text)}
                 />
+                
                 <TextInput
+                  placeholderTextColor="#D1D1D6"
                   style={styles.input}
                   placeholder="0"
                   keyboardType="numeric"
                   value={set.rir}
                   onChangeText={(text) => updateSet(exerciseIndex, setIndex, 'rir', text)}
                 />
+
                 <TouchableOpacity
-                  style={[styles.checkbox, set.completed && styles.checked]}
+                  style={[styles.checkButton, set.completed && styles.checkButtonActive, { flex: 0.8 }]}
                   onPress={() => updateSet(exerciseIndex, setIndex, 'completed', !set.completed)}
                 >
-                  {set.completed && <Text style={styles.checkmark}>✓</Text>}
+                  {set.completed ? (
+                    <Text style={styles.checkMarkText}>✓</Text>
+                  ) : (
+                    <View style={styles.checkMarkPlaceholder} />
+                  )}
                 </TouchableOpacity>
               </View>
             ))}
-            <Button title="Add Set" onPress={() => addSet(exerciseIndex)} />
+
+            <TouchableOpacity style={styles.addSetButton} onPress={() => addSet(exerciseIndex)}>
+              <Text style={styles.addSetText}>+ ADD SET</Text>
+            </TouchableOpacity>
           </View>
         )}
         contentContainerStyle={styles.list}
+        showsVerticalScrollIndicator={false}
       />
-      <View style={styles.footer}>
-        <Button title="Finish Workout" onPress={handleFinish} />
-      </View>
     </View>
   );
 }
@@ -137,80 +158,119 @@ export default function ActiveWorkoutScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFF',
   },
   header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    padding: 16,
-    backgroundColor: '#fff',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingTop: 60,
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#D1D1D6',
+  },
+  headerTitle: {
+    fontSize: 16,
+    fontWeight: '900',
+    letterSpacing: 2,
+    color: '#000',
+  },
+  finishText: {
+    fontSize: 14,
+    fontWeight: '900',
+    color: '#000',
+    letterSpacing: 1,
   },
   list: {
-    padding: 16,
-    paddingBottom: 80,
+    padding: 24,
+    paddingBottom: 60,
   },
-  exerciseCard: {
-    backgroundColor: '#fff',
-    padding: 16,
-    marginBottom: 16,
-    borderRadius: 8,
-    elevation: 2,
+  exerciseSection: {
+    marginBottom: 40,
   },
   exerciseName: {
     fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 12,
+    fontWeight: '900',
+    color: '#000',
+    marginBottom: 20,
+    letterSpacing: 1,
   },
-  headerRow: {
+  gridHeader: {
     flexDirection: 'row',
-    marginBottom: 8,
+    marginBottom: 10,
     paddingHorizontal: 4,
   },
-  colHeader: {
+  colLabel: {
     flex: 1,
-    fontWeight: '600',
+    fontSize: 10,
+    fontWeight: '800',
+    color: '#8E8E93',
     textAlign: 'center',
+    letterSpacing: 0.5,
   },
   setRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F2F2F7',
+  },
+  completedRow: {
+    backgroundColor: '#F2F2F7',
+    borderRadius: 4,
+  },
+  setText: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: '#000',
+    textAlign: 'center',
   },
   input: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 4,
-    padding: 8,
+    height: 40,
     marginHorizontal: 4,
     textAlign: 'center',
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#000',
   },
-  checkbox: {
-    flex: 1,
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 4,
+  checkButton: {
+    height: 32,
     marginHorizontal: 4,
+    borderWidth: 1,
+    borderColor: '#D1D1D6',
+    borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFF',
   },
-  checked: {
-    backgroundColor: '#e6ffe6',
-    borderColor: '#4caf50',
+  checkButtonActive: {
+    backgroundColor: '#000',
+    borderColor: '#000',
   },
-  checkmark: {
-    color: '#4caf50',
-    fontWeight: 'bold',
+  checkMarkText: {
+    color: '#FFF',
+    fontSize: 14,
+    fontWeight: '900',
   },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: '#fff',
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
+  checkMarkPlaceholder: {
+    width: 10,
+    height: 10,
+  },
+  addSetButton: {
+    marginTop: 15,
+    paddingVertical: 12,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#D1D1D6',
+    borderStyle: 'dashed',
+    borderRadius: 4,
+  },
+  addSetText: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: '#8E8E93',
+    letterSpacing: 1,
   },
 });

@@ -3,25 +3,37 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "start": "APP_ENV=development expo start",
+    "start:dev-client": "APP_ENV=development expo start --dev-client",
+    "start:prod": "APP_ENV=production expo start --dev-client",
+    "android": "APP_ENV=development expo run:android",
+    "ios": "APP_ENV=development expo run:ios",
+    "web": "APP_ENV=development expo start --web",
+    "build:dev": "eas build --profile development --platform android",
+    "build:preview": "eas build --profile preview --platform android",
+    "build:prod": "eas build --profile production --platform android"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-navigation/bottom-tabs": "^7.10.1",
     "@react-navigation/native": "^7.1.28",
     "@react-navigation/native-stack": "^7.10.1",
     "axios": "^1.13.2",
     "expo": "~54.0.31",
+    "expo-build-properties": "~1.0.10",
+    "expo-dev-client": "~6.0.20",
     "expo-status-bar": "~3.0.9",
+    "expo-updates": "~29.0.16",
     "react": "19.1.0",
     "react-native": "0.81.5",
+    "react-native-chart-kit": "^6.12.0",
     "react-native-safe-area-context": "^5.6.2",
-    "react-native-screens": "^4.20.0"
+    "react-native-screens": "^4.20.0",
+    "react-native-svg": "^15.15.1"
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
+    "dotenv": "^17.2.3",
     "typescript": "~5.9.2"
   },
   "private": true
