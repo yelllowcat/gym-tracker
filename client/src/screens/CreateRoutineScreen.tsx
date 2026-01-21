@@ -60,9 +60,10 @@ export default function CreateRoutineScreen() {
 
       await createRoutine(routineData);
       navigation.goBack();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to create routine:', error);
-      Alert.alert('Error', 'Failed to save routine');
+      const errorMessage = error.response?.data?.error || error.message || JSON.stringify(error);
+      Alert.alert('Error', `Failed to save: ${errorMessage}`);
     }
   };
 

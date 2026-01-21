@@ -12,8 +12,9 @@ interface AppConfig {
  * Falls back to localhost if no env vars are set
  */
 function getConfig(): AppConfig {
-  // Get from expo-constants (injected via app.config.js extra field)
-  const apiUrl = Constants.expoConfig?.extra?.apiUrl || 'http://localhost:3000';
+  // Hardcode production URL to ensure connection
+  // const apiUrl = Constants.expoConfig?.extra?.apiUrl || 'http://localhost:3000';
+  const apiUrl = 'https://gym-tracker.fun';
   const environment = Constants.expoConfig?.extra?.environment || 'development';
 
   return {
