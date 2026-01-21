@@ -16,4 +16,4 @@ RUN npm run build
 
 # Expose port and start
 EXPOSE 3000
-CMD ["sh", "-c", "if [ -z \"$DATABASE_URL\" ]; then echo 'ERROR: DATABASE_URL is not set'; exit 1; fi && npx prisma migrate deploy && npm start"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
