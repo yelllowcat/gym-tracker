@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const connectionString = process.env.DATABASE_URL;
+const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:g3vn3wtmqbys5xyd@gymtracker-j1lnpw:5432/gymtracker_db';
 
 if (!connectionString) {
   throw new Error('DATABASE_URL environment variable is not set');

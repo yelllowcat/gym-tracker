@@ -20,10 +20,6 @@ RUN npm run build
 # Set production env for runtime
 ENV NODE_ENV=production
 
-# Copy startup script
-COPY start.sh .
-RUN chmod +x start.sh
-
 # Expose port and start
 EXPOSE 3000
-CMD ["./start.sh"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
