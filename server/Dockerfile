@@ -16,4 +16,4 @@ RUN npm run build
 
 # Expose port and start
 EXPOSE 3000
-CMD ["sh", "-c", "echo \"Checking environment...\" && env | grep -q DATABASE_URL && echo \"DATABASE_URL is found.\" || echo \"DATABASE_URL is NOT found.\" && npx prisma migrate deploy && npm start"]
+CMD ["sh", "-c", "node check-env.js && npx prisma migrate deploy && npm start"]
