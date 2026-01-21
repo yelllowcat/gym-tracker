@@ -1,6 +1,5 @@
 node_modules
 dist
-.env
 server.log
 *.db
 *.db-journal

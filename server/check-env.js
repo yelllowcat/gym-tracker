@@ -1,3 +1,4 @@
+require('dotenv').config();
 console.log('--- Environment Check ---');
 console.log('NODE_ENV:', process.env.NODE_ENV);
 console.log('Available keys:', Object.keys(process.env).filter(k => !k.includes('SECRET') && !k.includes('PASSWORD') && !k.includes('KEY')));
