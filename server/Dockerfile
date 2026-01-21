@@ -18,6 +18,10 @@ RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" npx prisma gene
 COPY . .
 RUN npm run build
 
+# Copy startup script
+COPY start.sh .
+RUN chmod +x start.sh
+
 # Expose port and start
 EXPOSE 3000
-CMD ["sh", "-c", "node check-env.js && npx prisma migrate deploy && npm start"]
+CMD ["./start.sh"]
