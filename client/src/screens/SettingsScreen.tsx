@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../contexts/AuthContext';
 import { useStorage } from '../contexts/StorageContext';
 
 export default function SettingsScreen() {
+    const insets = useSafeAreaInsets();
     const { user, logout } = useAuth();
     const { refreshData, isRefreshing } = useStorage();
 
@@ -39,7 +41,7 @@ export default function SettingsScreen() {
     };
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={[styles.container, { paddingTop: insets.top + 20 }]}>
             <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Account</Text>
                 <View style={styles.card}>

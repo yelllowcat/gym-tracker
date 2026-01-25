@@ -8,8 +8,8 @@ try {
 
 module.exports = {
   expo: {
-    name: 'Gym Tracker',
-    slug: 'gym-tracker',
+    name: 'Rep',
+    slug: 'rep',
     version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/icon.png',

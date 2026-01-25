@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AnalyticsStats, StreakData } from '../api/client';
 import { useStorage } from '../contexts/StorageContext';
 import { getWeeklyGoal, setWeeklyGoal } from '../utils/storage';
@@ -16,6 +17,7 @@ import WeeklyStreakHistory from '../components/WeeklyStreakHistory';
 import WeeklyGoalSelector from '../components/WeeklyGoalSelector';
 
 export default function ProgressScreen() {
+  const insets = useSafeAreaInsets();
   const { storageProvider } = useStorage();
   const [timeRange, setTimeRange] = useState<TimeRange>('30d');
   const [loading, setLoading] = useState(true);
@@ -87,7 +89,7 @@ export default function ProgressScreen() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
+        <View style={[styles.header, { paddingTop: Math.max(insets.top, 20) }]}>
           <Text style={styles.headerTitle}>PROGRESS</Text>
         </View>
         <View style={styles.loadingContainer}>
@@ -101,7 +103,7 @@ export default function ProgressScreen() {
   if (!stats) {
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
+        <View style={[styles.header, { paddingTop: Math.max(insets.top, 20) }]}>
           <Text style={styles.headerTitle}>PROGRESS</Text>
         </View>
         <View style={styles.emptyContainer}>
@@ -115,7 +117,7 @@ export default function ProgressScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: Math.max(insets.top, 20) }]}>
         <Text style={styles.headerTitle}>PROGRESS</Text>
       </View>
       
@@ -233,7 +235,6 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: 24,
-    paddingTop: 60,
     paddingBottom: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#D1D1D6',

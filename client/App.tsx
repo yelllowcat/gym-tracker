@@ -23,7 +23,7 @@ const Stack = createNativeStackNavigator();
 function WorkoutsStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Workouts' }} />
+      <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'REP' }} />
       <Stack.Screen 
         name="ActiveWorkout" 
         component={ActiveWorkoutScreen} 
@@ -95,7 +95,7 @@ function MainTabs() {
       <Tab.Screen 
         name="WorkoutsTab" 
         component={WorkoutsStack} 
-        options={{ title: 'Workouts' }} 
+        options={{ title: 'REP' }} 
       />
       <Tab.Screen 
         name="HistoryTab" 

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../contexts/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function LoginScreen() {
     const navigation = useNavigation();
+    const insets = useSafeAreaInsets();
     const { login } = useAuth();
     
     const [email, setEmail] = useState('');
@@ -31,7 +33,12 @@ export default function LoginScreen() {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { paddingTop: insets.top + 20 }]}>
+            <View style={styles.header}>
+                <Text style={styles.brandName}>REP</Text>
+                <Text style={styles.tagline}>TRAIN. TRACK. PROGRESS.</Text>
+            </View>
+
             <View style={styles.form}>
                 <Text style={styles.label}>Email</Text>
                 <TextInput
@@ -95,6 +102,24 @@ const styles = StyleSheet.create({
     },
     form: {
         marginTop: 20,
+    },
+    header: {
+        alignItems: 'center',
+        marginBottom: 40,
+        marginTop: 20,
+    },
+    brandName: {
+        fontSize: 64,
+        fontWeight: '900',
+        color: '#000',
+        letterSpacing: 4,
+    },
+    tagline: {
+        fontSize: 12,
+        fontWeight: '700',
+        color: '#8E8E93',
+        letterSpacing: 2,
+        marginTop: -5,
     },
     label: {
         fontSize: 14,
