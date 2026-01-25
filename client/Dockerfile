@@ -60,7 +60,8 @@ RUN git config --global user.email "builder@example.com" \
     && git commit -m "Build context"
 
 # Increase JVM memory for Gradle build to prevent Metaspace errors
-ENV GRADLE_OPTS="-Xmx4g -XX:MaxMetaspaceSize=1g -Dorg.gradle.daemon=false"
+# Using 6g heap and 2g metaspace to match gradle.properties
+ENV GRADLE_OPTS="-Xmx6g -XX:MaxMetaspaceSize=2g -Dorg.gradle.daemon=false"
 
 # 10. Default Command
 # Runs EAS Build locally. 
