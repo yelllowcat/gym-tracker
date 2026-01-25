@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useStorage } from '../contexts/StorageContext';
 
 interface ExerciseInput {
@@ -11,6 +12,7 @@ interface ExerciseInput {
 
 export default function CreateRoutineScreen() {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const { storageProvider } = useStorage();
   const [name, setName] = useState('');
   const [exercises, setExercises] = useState<ExerciseInput[]>([
@@ -128,7 +130,7 @@ export default function CreateRoutineScreen() {
         </TouchableOpacity>
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 24) }]}>
         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
           <Text style={styles.saveButtonText}>SAVE ROUTINE</Text>
         </TouchableOpacity>
@@ -243,7 +245,6 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: '#fff',
     padding: 24,
-    paddingBottom: 32,
     borderTopWidth: 1,
     borderTopColor: '#D1D1D6',
   },

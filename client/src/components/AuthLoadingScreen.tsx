@@ -1,13 +1,16 @@
 import React from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function AuthLoadingScreen() {
+  const insets = useSafeAreaInsets();
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <ActivityIndicator size="large" color="#000" />
       </View>
-      <View style={styles.tabBar}>
+      <View style={[styles.tabBar, { height: 60 + insets.bottom, paddingBottom: 8 + insets.bottom }]}>
         <View style={styles.tabItem} />
         <View style={styles.tabItem} />
         <View style={styles.tabItem} />

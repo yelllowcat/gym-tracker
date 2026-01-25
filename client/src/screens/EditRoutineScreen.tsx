@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useStorage } from '../contexts/StorageContext';
 
 interface ExerciseInput {
@@ -13,6 +14,7 @@ type EditRoutineRouteProp = RouteProp<{ params: { routineId: string } }, 'params
 
 export default function EditRoutineScreen() {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const route = useRoute<EditRoutineRouteProp>();
   const { storageProvider } = useStorage();
   const { routineId } = route.params;
@@ -166,7 +168,7 @@ export default function EditRoutineScreen() {
         </TouchableOpacity>
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 24) }]}>
         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
           <Text style={styles.saveButtonText}>SAVE CHANGES</Text>
         </TouchableOpacity>
@@ -292,7 +294,6 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: '#fff',
     padding: 24,
-    paddingBottom: 32,
     borderTopWidth: 1,
     borderTopColor: '#D1D1D6',
   },

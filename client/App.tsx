@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import HomeScreen from './src/screens/HomeScreen';
 import ActiveWorkoutScreen from './src/screens/ActiveWorkoutScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
@@ -69,6 +70,8 @@ function AuthStack() {
 }
 
 function MainTabs() {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tab.Navigator 
       screenOptions={{ 
@@ -79,8 +82,8 @@ function MainTabs() {
           backgroundColor: '#FFF',
           borderTopWidth: 1,
           borderTopColor: '#D1D1D6',
-          height: 60,
-          paddingBottom: 8,
+          height: 60 + insets.bottom,
+          paddingBottom: 8 + insets.bottom,
         },
         tabBarLabelStyle: {
           fontSize: 12,
@@ -131,8 +134,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Routine } from '../api/client';
 import { useStorage } from '../contexts/StorageContext';
 
@@ -24,6 +25,7 @@ interface WorkoutExercise {
 
 export default function ActiveWorkoutScreen() {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const route = useRoute<ActiveWorkoutRouteProp>();
   const { storageProvider } = useStorage();
   const { routine } = route.params;
@@ -79,7 +81,7 @@ export default function ActiveWorkoutScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: Math.max(insets.top, 20) }]}>
         <Text style={styles.headerTitle}>{routine.name.toUpperCase()}</Text>
         <TouchableOpacity onPress={handleFinish}>
           <Text style={styles.finishText}>FINISH</Text>
@@ -150,7 +152,7 @@ export default function ActiveWorkoutScreen() {
             </TouchableOpacity>
           </View>
         )}
-        contentContainerStyle={styles.list}
+        contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 60 }]}
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -167,7 +169,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 24,
-    paddingTop: 60,
     paddingBottom: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#D1D1D6',
