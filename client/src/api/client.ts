@@ -1,6 +1,6 @@
 import axios from 'axios';
 import config from '../config/env';
-import { EventEmitter } from 'events';
+import { EventEmitter } from '../utils/EventEmitter';
 
 export const apiEvents = new EventEmitter();
 
