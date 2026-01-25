@@ -6,18 +6,34 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  routines  Routine[]
+  workouts  Workout[]
+}
+
 model Routine {
   id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   exercises RoutineExercise[]
+  
+  @@index([userId])
 }
 
 model RoutineExercise {
   id          String  @id @default(uuid())
   routineId   String
-  routine     Routine @relation(fields: [routineId], references: [id])
+  routine     Routine @relation(fields: [routineId], references: [id], onDelete: Cascade)
   name        String
   order       Int
   targetSets  Int
@@ -26,16 +42,22 @@ model RoutineExercise {
 
 model Workout {
   id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   name      String
+  routineId String?
   startedAt DateTime @default(now())
   endedAt   DateTime?
   exercises WorkoutExercise[]
+  
+  @@index([userId])
+  @@index([startedAt])
 }
 
 model WorkoutExercise {
   id        String   @id @default(uuid())
   workoutId String
-  workout   Workout  @relation(fields: [workoutId], references: [id])
+  workout   Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
   name      String
   order     Int
   sets      WorkoutSet[]
@@ -44,9 +66,10 @@ model WorkoutExercise {
 model WorkoutSet {
   id                String          @id @default(uuid())
   workoutExerciseId String
-  workoutExercise   WorkoutExercise @relation(fields: [workoutExerciseId], references: [id])
+  workoutExercise   WorkoutExercise @relation(fields: [workoutExerciseId], references: [id], onDelete: Cascade)
   weight            Float
   reps              Int
   rir               Int?
   completed         Boolean         @default(false)
 }
+

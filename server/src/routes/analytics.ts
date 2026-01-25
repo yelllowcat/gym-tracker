@@ -1,7 +1,11 @@
-import { Router, Request, Response } from 'express';
+import { Router, Response } from 'express';
 import { prisma } from '../db';
+import { authMiddleware, AuthRequest } from '../middleware/auth';
 
 const router = Router();
+
+// Apply auth middleware to all routes
+router.use(authMiddleware);
 
 // Helper function to calculate time range
 function getTimeRangeDate(timeRange: string): Date {
@@ -27,7 +31,7 @@ function getWeekNumber(date: Date): string {
 }
 
 // GET /analytics/stats - Get overall statistics
-router.get('/stats', async (req: Request, res: Response) => {
+router.get('/stats', async (req: AuthRequest, res: Response) => {
   try {
     const timeRange = (req.query.timeRange as string) || '30d';
     const startDate = getTimeRangeDate(timeRange);
@@ -35,6 +39,7 @@ router.get('/stats', async (req: Request, res: Response) => {
     // Fetch workouts with all nested data
     const workouts = await prisma.workout.findMany({
       where: {
+        userId: req.userId!,
         startedAt: {
           gte: startDate,
         },
@@ -77,8 +82,8 @@ router.get('/stats', async (req: Request, res: Response) => {
     }>();
 
     workouts.forEach(workout => {
-      workout.exercises.forEach(exercise => {
-        exercise.sets.forEach(set => {
+      workout.exercises.forEach((exercise: any) => {
+        exercise.sets.forEach((set: any) => {
           totalVolume += set.weight * set.reps;
 
           // Track exercise stats
@@ -140,7 +145,7 @@ router.get('/stats', async (req: Request, res: Response) => {
 });
 
 // GET /analytics/exercise/:exerciseName - Get exercise history
-router.get('/exercise/:exerciseName', async (req: Request, res: Response) => {
+router.get('/exercise/:exerciseName', async (req: AuthRequest, res: Response) => {
   try {
     const { exerciseName } = req.params;
     const timeRange = (req.query.timeRange as string) || '30d';
@@ -149,6 +154,7 @@ router.get('/exercise/:exerciseName', async (req: Request, res: Response) => {
     // Fetch workouts containing this exercise
     const workouts = await prisma.workout.findMany({
       where: {
+        userId: req.userId!,
         startedAt: {
           gte: startDate,
         },
@@ -203,10 +209,10 @@ router.get('/exercise/:exerciseName', async (req: Request, res: Response) => {
     // Find personal record (max weight across all history)
     let personalRecord = null;
     if (history.length > 0) {
-      const prEntry = history.reduce((max, entry) => 
+      const prEntry = history.reduce((max, entry) =>
         entry.maxWeight > max.maxWeight ? entry : max
       );
-      const prSet = prEntry.sets.reduce((max: any, set: any) => 
+      const prSet = prEntry.sets.reduce((max: any, set: any) =>
         set.weight > max.weight ? set : max
       );
       personalRecord = {
@@ -243,12 +249,12 @@ function formatDate(date: Date): string {
 }
 
 // GET /analytics/streak - Get streak data
-router.get('/streak', async (req: Request, res: Response) => {
+router.get('/streak', async (req: AuthRequest, res: Response) => {
   try {
     // Allow customizable weekly goal (default: 3)
     const goalParam = req.query.weeklyGoal as string;
     const weeklyGoal = goalParam ? parseInt(goalParam, 10) : 3;
-    
+
     // Validate goal (must be between 1 and 7)
     if (weeklyGoal < 1 || weeklyGoal > 7 || isNaN(weeklyGoal)) {
       return res.status(400).json({ error: 'Weekly goal must be between 1 and 7' });
@@ -257,6 +263,7 @@ router.get('/streak', async (req: Request, res: Response) => {
     // Fetch all workouts ordered by date
     const workouts = await prisma.workout.findMany({
       where: {
+        userId: req.userId!,
         endedAt: {
           not: null, // Only count completed workouts
         },
@@ -282,7 +289,7 @@ router.get('/streak', async (req: Request, res: Response) => {
     workouts.forEach(workout => {
       const weekStart = getWeekStartDate(new Date(workout.startedAt));
       const weekKey = formatDate(weekStart);
-      
+
       if (!weeklyMap.has(weekKey)) {
         weeklyMap.set(weekKey, []);
       }
@@ -344,7 +351,7 @@ router.get('/streak', async (req: Request, res: Response) => {
       const date = new Date(startDate.getTime() + i * 24 * 60 * 60 * 1000);
       const dateKey = formatDate(date);
       const workoutCount = dailyMap.get(dateKey) || 0;
-      
+
       // Calculate intensity (0-4 scale)
       let intensity = 0;
       if (workoutCount === 1) intensity = 1;

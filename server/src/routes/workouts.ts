@@ -1,14 +1,19 @@
-import { Router, Request, Response } from 'express';
+import { Router, Response } from 'express';
 import { prisma } from '../db';
+import { authMiddleware, AuthRequest } from '../middleware/auth';
 
 const router = Router();
+
+// Apply auth middleware to all routes
+router.use(authMiddleware);
 
 // GET /: List history.
 // Order by startedAt desc.
 // Include basic info (maybe count of exercises).
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', async (req: AuthRequest, res: Response) => {
   try {
     const workouts = await prisma.workout.findMany({
+      where: { userId: req.userId! },
       orderBy: {
         startedAt: 'desc',
       },
@@ -26,11 +31,11 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 // GET /:id: Detail view. Include exercises and sets.
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/:id', async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params as { id: string };
-    const workout = await prisma.workout.findUnique({
-      where: { id },
+    const workout = await prisma.workout.findFirst({
+      where: { id, userId: req.userId! },
       include: {
         exercises: {
           orderBy: {
@@ -69,9 +74,9 @@ router.get('/:id', async (req: Request, res: Response) => {
 // POST /: Create Workout.
 // Body: { name, routineId (optional), startedAt, endedAt, exercises: { name, order, sets: { weight, reps, rir, completed }[] }[] }
 // Deep nested write: create: exercises: { create: sets: { create } }.
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', async (req: AuthRequest, res: Response) => {
   try {
-    const { name, startedAt, endedAt, exercises } = req.body;
+    const { name, routineId, startedAt, endedAt, exercises } = req.body;
 
     if (!name) {
       res.status(400).json({ error: 'Name is required' });
@@ -79,7 +84,9 @@ router.post('/', async (req: Request, res: Response) => {
     }
 
     const workoutData: any = {
+      userId: req.userId!,
       name,
+      routineId: routineId || null,
       exercises: {
         create: exercises?.map((e: any, index: number) => ({
           name: e.name,
@@ -113,9 +120,9 @@ router.post('/', async (req: Request, res: Response) => {
           },
           include: {
             sets: {
-                orderBy: {
-                    id: 'asc'
-                }
+              orderBy: {
+                id: 'asc'
+              }
             },
           },
         },
