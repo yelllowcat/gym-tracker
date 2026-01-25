@@ -163,4 +163,19 @@ router.post('/logout', authMiddleware, async (req: AuthRequest, res: Response): 
     res.json({ message: 'Logged out successfully' });
 });
 
+// Refresh token
+router.post('/refresh-token', authMiddleware, async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        const token = jwt.sign(
+            { userId: req.userId },
+            process.env.JWT_SECRET!,
+            { expiresIn: '30d' }
+        );
+        res.json({ token });
+    } catch (error) {
+        console.error('Refresh token error:', error);
+        res.status(500).json({ error: 'Failed to refresh token' });
+    }
+});
+
 export default router;

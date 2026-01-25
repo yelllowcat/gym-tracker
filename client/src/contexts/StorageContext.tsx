@@ -1,18 +1,12 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StorageManager } from '../storage/StorageManager';
-import { StorageProvider as IStorageProvider, StorageMode } from '../storage/types';
+import { CachedCloudStorageProvider } from '../storage/CachedCloudStorageProvider';
+import { StorageProvider as IStorageProvider } from '../storage/types';
 import { useAuth } from './AuthContext';
 
-const STORAGE_MODE_KEY = '@gym_tracker_storage_mode';
-
 export interface StorageContextType {
-    storageMode: StorageMode;
     storageProvider: IStorageProvider;
-    storageManager: StorageManager;
-    isSyncing: boolean;
-    setStorageMode: (mode: StorageMode) => Promise<void>;
-    refreshProvider: () => void;
+    refreshData: () => Promise<void>;
+    isRefreshing: boolean;
 }
 
 export const StorageContext = createContext<StorageContextType | null>(null);
@@ -23,97 +17,47 @@ interface StorageProviderProps {
 
 export const StorageProvider: React.FC<StorageProviderProps> = ({ children }) => {
     const { token, isAuthenticated } = useAuth();
-    const [storageMode, setStorageModeState] = useState<StorageMode>('local');
-    const [storageManager, setStorageManager] = useState<StorageManager>(
-        new StorageManager('local')
-    );
-    const [isSyncing, setIsSyncing] = useState(false);
+    const [storageProvider, setStorageProvider] = useState<IStorageProvider | null>(null);
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     useEffect(() => {
-        loadStorageMode();
-    }, []);
-
-    // Update storage manager when auth token changes
-    useEffect(() => {
-        if (storageMode === 'cloud' && token) {
-            setStorageManager(new StorageManager('cloud', token));
+        if (isAuthenticated && token) {
+            setStorageProvider(new CachedCloudStorageProvider(token));
+        } else {
+            setStorageProvider(null);
         }
-    }, [token]);
+    }, [token, isAuthenticated]);
 
-    const loadStorageMode = async () => {
+    const refreshData = async () => {
+        if (!storageProvider || !(storageProvider instanceof CachedCloudStorageProvider)) return;
+        setIsRefreshing(true);
         try {
-            const savedMode = await AsyncStorage.getItem(STORAGE_MODE_KEY);
-            if (savedMode === 'cloud' || savedMode === 'local') {
-                setStorageModeState(savedMode);
-                // If cloud mode but no token, fall back to local
-                if (savedMode === 'cloud' && !token) {
-                    console.log('Cloud mode saved but no token, falling back to local');
-                    setStorageModeState('local');
-                    await AsyncStorage.setItem(STORAGE_MODE_KEY, 'local');
-                } else {
-                    setStorageManager(new StorageManager(savedMode, token || undefined));
-                }
-            }
+            await storageProvider.clearCache();
+            // Force re-fetch of routines and workouts to populate cache
+            await storageProvider.getRoutines();
+            await storageProvider.getWorkouts();
         } catch (error) {
-            console.error('Error loading storage mode:', error);
-        }
-    };
-
-    const setStorageMode = async (mode: StorageMode) => {
-        if (mode === storageMode) {
-            return; // Already in this mode
-        }
-
-        // Validate cloud mode requires authentication
-        if (mode === 'cloud' && !isAuthenticated) {
-            throw new Error('You must be logged in to use cloud storage');
-        }
-
-        setIsSyncing(true);
-        try {
-            // Perform migration
-            if (mode === 'cloud' && storageMode === 'local') {
-                console.log('Migrating from local to cloud...');
-                await storageManager.migrateToCloud(token!);
-            } else if (mode === 'local' && storageMode === 'cloud') {
-                console.log('Migrating from cloud to local...');
-                await storageManager.migrateToLocal();
-            }
-
-            // Save preference
-            await AsyncStorage.setItem(STORAGE_MODE_KEY, mode);
-
-            // Update state
-            setStorageModeState(mode);
-            setStorageManager(new StorageManager(mode, token || undefined));
-
-            console.log(`Storage mode switched to ${mode}`);
-        } catch (error) {
-            console.error('Error switching storage mode:', error);
-            throw error;
+            console.error('Refresh failed:', error);
         } finally {
-            setIsSyncing(false);
+            setIsRefreshing(false);
         }
-    };
-
-    const refreshProvider = () => {
-        // Force refresh of storage provider (useful after auth changes)
-        setStorageManager(new StorageManager(storageMode, token || undefined));
     };
 
     const value: StorageContextType = {
-        storageMode,
-        storageProvider: storageManager.getProvider(),
-        storageManager,
-        isSyncing,
-        setStorageMode,
-        refreshProvider,
+        storageProvider: storageProvider!,
+        refreshData,
+        isRefreshing,
     };
+
+    // If we are authenticated but provider isn't ready yet, return null
+    // AppContent in App.tsx handles the high-level loading state
+    if (isAuthenticated && !storageProvider) {
+        return null;
+    }
 
     return <StorageContext.Provider value={value}>{children}</StorageContext.Provider>;
 };
 
-// Custom hook for using storage context
 export const useStorage = () => {
     const context = React.useContext(StorageContext);
     if (!context) {

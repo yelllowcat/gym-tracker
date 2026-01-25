@@ -1,8 +1,13 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import client from '../api/client';
+import client, { apiEvents } from '../api/client';
+import { tokenManager } from '../utils/tokenManager';
 
 const AUTH_TOKEN_KEY = '@gym_tracker_auth_token';
+const CACHE_KEYS = {
+    ROUTINES: '@gym_tracker_cache_routines',
+    WORKOUTS: '@gym_tracker_cache_workouts',
+};
 
 export interface User {
     id: string;
@@ -33,6 +38,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     useEffect(() => {
         loadStoredAuth();
+
+        const handleUnauthorized = () => {
+            console.log('API unauthorized event received, logging out');
+            logout();
+        };
+
+        apiEvents.on('unauthorized', handleUnauthorized);
+
+        return () => {
+            tokenManager.stopAutoRefresh();
+            apiEvents.off('unauthorized', handleUnauthorized);
+        };
     }, []);
 
     const loadStoredAuth = async () => {
@@ -43,19 +60,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 client.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
 
                 // Verify token by fetching user data
-                // Note: This is optional - app works offline without authentication
                 try {
                     const response = await client.get('/auth/me');
                     setUser(response.data);
                     setToken(storedToken);
-                    console.log('✅ Token verified, user authenticated');
+                    
+                    // Start auto-refresh
+                    tokenManager.startAutoRefresh(storedToken, async (newToken) => {
+                        if (newToken) {
+                            setToken(newToken);
+                            await AsyncStorage.setItem(AUTH_TOKEN_KEY, newToken);
+                            client.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+                        } else {
+                            await logout();
+                        }
+                    });
                 } catch (error: any) {
-                    // Token might be invalid OR server might be unreachable
-                    // Don't remove token immediately - could just be offline
-                    console.log('⚠️ Could not verify token (offline or invalid):', error.message);
-                    // Keep token stored for potential future use
-                    // User will need to login again when they want to use cloud features
-                    delete client.defaults.headers.common['Authorization'];
+                    // If it's a network error, we trust the token for now (Lenient mode 1.b)
+                    if (!error.response) {
+                        setToken(storedToken);
+                        console.log('Offline: trusting cached token');
+                    } else {
+                        // Token is definitely invalid (401, 403, etc)
+                        console.error('Stored token is invalid:', error);
+                        await logout();
+                    }
                 }
             }
         } catch (error) {
@@ -70,15 +99,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             const response = await client.post('/auth/login', { email, password });
             const { token: newToken, user: newUser } = response.data;
 
-            // Store token
             await AsyncStorage.setItem(AUTH_TOKEN_KEY, newToken);
-
-            // Set auth header
             client.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
 
-            // Update state
             setToken(newToken);
             setUser(newUser);
+
+            tokenManager.startAutoRefresh(newToken, async (t) => {
+                if (t) {
+                    setToken(t);
+                    await AsyncStorage.setItem(AUTH_TOKEN_KEY, t);
+                    client.defaults.headers.common['Authorization'] = `Bearer ${t}`;
+                } else {
+                    await logout();
+                }
+            });
         } catch (error: any) {
             console.error('Login error:', error);
             throw new Error(error.response?.data?.error || 'Login failed');
@@ -90,15 +125,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             const response = await client.post('/auth/register', { email, password, name });
             const { token: newToken, user: newUser } = response.data;
 
-            // Store token
             await AsyncStorage.setItem(AUTH_TOKEN_KEY, newToken);
-
-            // Set auth header
             client.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
 
-            // Update state
             setToken(newToken);
             setUser(newUser);
+
+            tokenManager.startAutoRefresh(newToken, async (t) => {
+                if (t) {
+                    setToken(t);
+                    await AsyncStorage.setItem(AUTH_TOKEN_KEY, t);
+                    client.defaults.headers.common['Authorization'] = `Bearer ${t}`;
+                } else {
+                    await logout();
+                }
+            });
         } catch (error: any) {
             console.error('Registration error:', error);
             throw new Error(error.response?.data?.error || 'Registration failed');
@@ -107,13 +148,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const logout = async () => {
         try {
-            // Remove token from storage
+            tokenManager.stopAutoRefresh();
             await AsyncStorage.removeItem(AUTH_TOKEN_KEY);
-
-            // Remove auth header
+            await AsyncStorage.removeItem(CACHE_KEYS.ROUTINES);
+            await AsyncStorage.removeItem(CACHE_KEYS.WORKOUTS);
             delete client.defaults.headers.common['Authorization'];
-
-            // Clear state
             setToken(null);
             setUser(null);
         } catch (error) {
@@ -128,13 +167,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         login,
         register,
         logout,
-        isAuthenticated: !!user && !!token,
+        isAuthenticated: !!token, 
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-// Custom hook for using auth context
 export const useAuth = () => {
     const context = React.useContext(AuthContext);
     if (!context) {

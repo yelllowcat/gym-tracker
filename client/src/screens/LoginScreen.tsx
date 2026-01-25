@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../contexts/AuthContext';
-import { useStorage } from '../contexts/StorageContext';
 
 export default function LoginScreen() {
     const navigation = useNavigation();
     const { login } = useAuth();
-    const { setStorageMode } = useStorage();
     
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -22,16 +20,7 @@ export default function LoginScreen() {
         setIsLoading(true);
         try {
             await login(email, password);
-            // After successful login, switch to cloud storage (which triggers migration)
-            try {
-                await setStorageMode('cloud');
-                Alert.alert('Success', 'Logged in and syncing data!');
-                navigation.goBack();
-            } catch (syncError) {
-                console.error('Sync error:', syncError);
-                Alert.alert('Warning', 'Logged in, but failed to enable cloud sync. Please try again in Settings.');
-                navigation.goBack();
-            }
+            // After successful login, App.tsx will automatically switch to MainTabs
         } catch (error: any) {
             Alert.alert('Error', error.message || 'Failed to login');
         } finally {

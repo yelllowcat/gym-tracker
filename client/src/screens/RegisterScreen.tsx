@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../contexts/AuthContext';
-import { useStorage } from '../contexts/StorageContext';
 
 export default function RegisterScreen() {
     const navigation = useNavigation();
     const { register } = useAuth();
-    const { setStorageMode } = useStorage();
     
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -29,16 +27,7 @@ export default function RegisterScreen() {
         setIsLoading(true);
         try {
             await register(email, password, name);
-            // After successful registration, switch to cloud storage
-            try {
-                await setStorageMode('cloud');
-                Alert.alert('Success', 'Account created and syncing data!');
-                navigation.goBack();
-            } catch (syncError) {
-                console.error('Sync error:', syncError);
-                Alert.alert('Warning', 'Account created, but failed to enable cloud sync. Please try again in Settings.');
-                navigation.goBack();
-            }
+            // After successful registration, App.tsx will automatically switch to MainTabs
         } catch (error: any) {
             Alert.alert('Error', error.message || 'Failed to register');
         } finally {

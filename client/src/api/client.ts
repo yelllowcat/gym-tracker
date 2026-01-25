@@ -1,5 +1,8 @@
 import axios from 'axios';
 import config from '../config/env';
+import { EventEmitter } from 'events';
+
+export const apiEvents = new EventEmitter();
 
 export interface Exercise {
   name: string;
@@ -111,7 +114,7 @@ client.interceptors.request.use(
   }
 );
 
-// Response interceptor for debugging
+// Response interceptor for debugging and 401 handling
 client.interceptors.response.use(
   (response) => {
     console.log(`API Response: ${response.status} ${response.config.url}`);
@@ -122,6 +125,10 @@ client.interceptors.response.use(
     if (error.response) {
       console.error('Response data:', error.response.data);
       console.error('Response status:', error.response.status);
+      
+      if (error.response.status === 401) {
+        apiEvents.emit('unauthorized');
+      }
     }
     return Promise.reject(error);
   }
