@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import HomeScreen from './src/screens/HomeScreen';
 import ActiveWorkoutScreen from './src/screens/ActiveWorkoutScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
@@ -16,6 +17,8 @@ import RegisterScreen from './src/screens/RegisterScreen';
 import { AuthProvider, useAuth } from './src/contexts/AuthContext';
 import { StorageProvider } from './src/contexts/StorageContext';
 import AuthLoadingScreen from './src/components/AuthLoadingScreen';
+import { RepTheme } from './src/constants/theme';
+import { Colors } from './src/constants/colors';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -24,20 +27,20 @@ function WorkoutsStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'REP' }} />
-      <Stack.Screen 
-        name="ActiveWorkout" 
-        component={ActiveWorkoutScreen} 
-        options={{ title: 'Active Workout' }} 
+      <Stack.Screen
+        name="ActiveWorkout"
+        component={ActiveWorkoutScreen}
+        options={{ title: 'Active Workout' }}
       />
-      <Stack.Screen 
-        name="CreateRoutine" 
-        component={CreateRoutineScreen} 
-        options={{ title: 'Create Routine' }} 
+      <Stack.Screen
+        name="CreateRoutine"
+        component={CreateRoutineScreen}
+        options={{ title: 'Create Routine' }}
       />
-      <Stack.Screen 
-        name="EditRoutine" 
-        component={EditRoutineScreen} 
-        options={{ title: 'Edit Routine' }} 
+      <Stack.Screen
+        name="EditRoutine"
+        component={EditRoutineScreen}
+        options={{ title: 'Edit Routine' }}
       />
     </Stack.Navigator>
   );
@@ -73,15 +76,15 @@ function MainTabs() {
   const insets = useSafeAreaInsets();
 
   return (
-    <Tab.Navigator 
-      screenOptions={{ 
+    <Tab.Navigator
+      screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#000',
-        tabBarInactiveTintColor: '#8E8E93',
+        tabBarActiveTintColor: Colors.Primary,
+        tabBarInactiveTintColor: Colors.TextSecondary,
         tabBarStyle: {
-          backgroundColor: '#FFF',
+          backgroundColor: Colors.Surface,
           borderTopWidth: 1,
-          borderTopColor: '#D1D1D6',
+          borderTopColor: Colors.Border,
           height: 60 + insets.bottom,
           paddingBottom: 8 + insets.bottom,
         },
@@ -92,25 +95,25 @@ function MainTabs() {
         }
       }}
     >
-      <Tab.Screen 
-        name="WorkoutsTab" 
-        component={WorkoutsStack} 
-        options={{ title: 'REP' }} 
+      <Tab.Screen
+        name="WorkoutsTab"
+        component={WorkoutsStack}
+        options={{ title: 'REP' }}
       />
-      <Tab.Screen 
-        name="HistoryTab" 
-        component={HistoryStack} 
-        options={{ title: 'History' }} 
+      <Tab.Screen
+        name="HistoryTab"
+        component={HistoryStack}
+        options={{ title: 'History' }}
       />
-      <Tab.Screen 
-        name="ProgressTab" 
-        component={ProgressScreen} 
-        options={{ title: 'Progress' }} 
+      <Tab.Screen
+        name="ProgressTab"
+        component={ProgressScreen}
+        options={{ title: 'Progress' }}
       />
-      <Tab.Screen 
-        name="SettingsTab" 
-        component={SettingsStack} 
-        options={{ title: 'Settings' }} 
+      <Tab.Screen
+        name="SettingsTab"
+        component={SettingsStack}
+        options={{ title: 'Settings' }}
       />
     </Tab.Navigator>
   );
@@ -125,7 +128,8 @@ function AppContent() {
 
   return (
     <StorageProvider>
-      <NavigationContainer>
+      <NavigationContainer theme={RepTheme}>
+        <StatusBar style="light" />
         {isAuthenticated ? <MainTabs /> : <AuthStack />}
       </NavigationContainer>
     </StorageProvider>

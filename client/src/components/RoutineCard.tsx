@@ -1,6 +1,6 @@
-import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Routine } from '../api/client';
+import { Colors } from '../constants/colors';
 
 interface RoutineCardProps {
   routine: Routine;
@@ -15,14 +15,14 @@ export default function RoutineCard({ routine, onDelete, onEdit, onStart }: Rout
       <View style={styles.header}>
         <Text style={styles.title}>{routine.name.toUpperCase()}</Text>
         <View style={styles.actions}>
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={() => onEdit && onEdit(routine.id)}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             style={styles.actionButton}
           >
             <Text style={styles.editText}>EDIT</Text>
           </TouchableOpacity>
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={() => onDelete && onDelete(routine.id)}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
@@ -30,7 +30,7 @@ export default function RoutineCard({ routine, onDelete, onEdit, onStart }: Rout
           </TouchableOpacity>
         </View>
       </View>
-      
+
       <View style={styles.exerciseList}>
         {routine.exercises.map((ex, index) => (
           <Text key={index} style={styles.exercise}>
@@ -39,8 +39,8 @@ export default function RoutineCard({ routine, onDelete, onEdit, onStart }: Rout
         ))}
       </View>
 
-      <TouchableOpacity 
-        style={styles.startButton} 
+      <TouchableOpacity
+        style={styles.startButton}
         onPress={() => onStart && onStart(routine)}
       >
         <Text style={styles.startButtonText}>START WORKOUT</Text>
@@ -51,12 +51,12 @@ export default function RoutineCard({ routine, onDelete, onEdit, onStart }: Rout
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.Surface,
     padding: 20,
     marginVertical: 10,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
   },
   header: {
     flexDirection: 'row',
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1,
   },
   actions: {
@@ -80,13 +80,13 @@ const styles = StyleSheet.create({
   editText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 0.5,
   },
   deleteText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     letterSpacing: 0.5,
   },
   exerciseList: {
@@ -94,16 +94,16 @@ const styles = StyleSheet.create({
   },
   exercise: {
     fontSize: 15,
-    color: '#3A3A3C',
+    color: Colors.TextPrimary,
     marginBottom: 4,
     fontWeight: '500',
   },
   exerciseDetails: {
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     fontSize: 13,
   },
   startButton: {
-    backgroundColor: '#000',
+    backgroundColor: Colors.Primary,
     paddingVertical: 14,
     borderRadius: 2,
     alignItems: 'center',

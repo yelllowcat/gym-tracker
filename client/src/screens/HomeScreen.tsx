@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Routine } from '../api/client';
 import { useStorage } from '../contexts/StorageContext';
 import RoutineCard from '../components/RoutineCard';
+import { Colors } from '../constants/colors';
 
 type RootStackParamList = {
   ActiveWorkout: { routine: Routine };
@@ -47,8 +48,8 @@ export default function HomeScreen() {
       'Are you sure you want to delete this routine?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { 
-          text: 'Delete', 
+        {
+          text: 'Delete',
           style: 'destructive',
           onPress: async () => {
             try {
@@ -70,10 +71,10 @@ export default function HomeScreen() {
         data={routines}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <RoutineCard 
+          <RoutineCard
             routine={item}
             onEdit={handleEditRoutine}
-            onDelete={handleDeleteRoutine} 
+            onDelete={handleDeleteRoutine}
             onStart={(routine) => navigation.navigate('ActiveWorkout', { routine })}
           />
         )}
@@ -91,7 +92,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Background,
   },
   list: {
     padding: 20,
@@ -99,15 +100,16 @@ const styles = StyleSheet.create({
   },
   createButton: {
     borderWidth: 1,
-    borderColor: '#000',
+    borderColor: Colors.Primary,
     borderStyle: 'dashed',
     paddingVertical: 20,
     borderRadius: 4,
     alignItems: 'center',
     marginBottom: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)', // Subtle white tint
   },
   createButtonText: {
-    color: '#000',
+    color: Colors.Primary,
     fontSize: 14,
     fontWeight: '800',
     letterSpacing: 1,
