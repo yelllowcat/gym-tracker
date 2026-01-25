@@ -51,6 +51,17 @@ RUN npm install
 # 9. Copy Source Code
 COPY . .
 
+# 9.5 Initialize Git (EAS requirement)
+# EAS CLI requires a git repository to track build context
+RUN git config --global user.email "builder@example.com" \
+    && git config --global user.name "Builder" \
+    && git init \
+    && git add . \
+    && git commit -m "Build context"
+
+# Increase JVM memory for Gradle build to prevent Metaspace errors
+ENV GRADLE_OPTS="-Xmx4g -XX:MaxMetaspaceSize=1g -Dorg.gradle.daemon=false"
+
 # 10. Default Command
 # Runs EAS Build locally. 
 # Output will be generated in the container, so you should mount a volume to extract it.
