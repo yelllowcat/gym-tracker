@@ -2,7 +2,8 @@ import React, { useState, useCallback } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { fetchWorkouts, Workout } from '../api/client';
+import { Workout } from '../api/client';
+import { useStorage } from '../contexts/StorageContext';
 
 type RootStackParamList = {
   WorkoutDetail: { workoutId: string };
@@ -10,6 +11,7 @@ type RootStackParamList = {
 
 export default function HistoryScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { storageProvider } = useStorage();
   const [workouts, setWorkouts] = useState<Workout[]>([]);
 
   useFocusEffect(
@@ -20,7 +22,7 @@ export default function HistoryScreen() {
 
   const loadWorkouts = async () => {
     try {
-      const data = await fetchWorkouts();
+      const data = await storageProvider.getWorkouts();
       data.sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
       setWorkouts(data);
     } catch (error) {

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { saveWorkout, Routine } from '../api/client';
+import { Routine } from '../api/client';
+import { useStorage } from '../contexts/StorageContext';
 
 type RootStackParamList = {
   ActiveWorkout: { routine: Routine };
@@ -24,6 +25,7 @@ interface WorkoutExercise {
 export default function ActiveWorkoutScreen() {
   const navigation = useNavigation();
   const route = useRoute<ActiveWorkoutRouteProp>();
+  const { storageProvider } = useStorage();
   const { routine } = route.params;
   const startTime = React.useRef(new Date()).current;
 
@@ -67,7 +69,7 @@ export default function ActiveWorkoutScreen() {
     };
 
     try {
-      await saveWorkout(workoutData);
+      await storageProvider.saveWorkout(workoutData);
       navigation.goBack();
     } catch (error) {
       console.error('Failed to save workout:', error);

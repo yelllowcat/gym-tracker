@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { fetchRoutines, deleteRoutine, Routine } from '../api/client';
+import { Routine } from '../api/client';
+import { useStorage } from '../contexts/StorageContext';
 import RoutineCard from '../components/RoutineCard';
 
 type RootStackParamList = {
@@ -13,11 +14,12 @@ type RootStackParamList = {
 
 export default function HomeScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { storageProvider } = useStorage();
   const [routines, setRoutines] = useState<Routine[]>([]);
 
   const loadRoutines = async () => {
     try {
-      const data = await fetchRoutines();
+      const data = await storageProvider.getRoutines();
       setRoutines(data);
     } catch (error) {
       console.error('Failed to fetch routines:', error);
@@ -50,7 +52,7 @@ export default function HomeScreen() {
           style: 'destructive',
           onPress: async () => {
             try {
-              await deleteRoutine(id);
+              await storageProvider.deleteRoutine(id);
               loadRoutines();
             } catch (error) {
               console.error('Failed to delete routine:', error);

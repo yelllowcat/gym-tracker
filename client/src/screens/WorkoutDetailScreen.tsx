@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useRoute, RouteProp } from '@react-navigation/native';
-import { fetchWorkoutById, Workout } from '../api/client';
+import { Workout } from '../api/client';
+import { useStorage } from '../contexts/StorageContext';
 
 type RootStackParamList = {
   WorkoutDetail: { workoutId: string };
@@ -11,6 +12,7 @@ type WorkoutDetailRouteProp = RouteProp<RootStackParamList, 'WorkoutDetail'>;
 
 export default function WorkoutDetailScreen() {
   const route = useRoute<WorkoutDetailRouteProp>();
+  const { storageProvider } = useStorage();
   const { workoutId } = route.params;
   const [workout, setWorkout] = useState<Workout | null>(null);
   const [loading, setLoading] = useState(true);
@@ -21,7 +23,7 @@ export default function WorkoutDetailScreen() {
 
   const loadWorkout = async () => {
     try {
-      const data = await fetchWorkoutById(workoutId);
+      const data = await storageProvider.getWorkout(workoutId);
       setWorkout(data);
     } catch (error) {
       console.error('Failed to fetch workout details:', error);

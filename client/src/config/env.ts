@@ -12,9 +12,11 @@ interface AppConfig {
  * Falls back to localhost if no env vars are set
  */
 function getConfig(): AppConfig {
-  // Hardcode production URL to ensure connection
-  // const apiUrl = Constants.expoConfig?.extra?.apiUrl || 'http://localhost:3000';
-  const apiUrl = 'https://gym-tracker.fun';
+  // Use local network IP for development testing
+  // Change this to your computer's IP address or use the emulator localhost alias
+  const apiUrl = Constants.expoConfig?.extra?.apiUrl || 'http://192.168.1.89:3000';
+  // const apiUrl = 'http://10.0.2.2:3000'; // Use this for Android Emulator
+  // const apiUrl = 'https://gym-tracker.fun'; // Production URL
   const environment = Constants.expoConfig?.extra?.environment || 'development';
 
   return {

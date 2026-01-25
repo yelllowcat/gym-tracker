@@ -9,6 +9,11 @@ import WorkoutDetailScreen from './src/screens/WorkoutDetailScreen';
 import CreateRoutineScreen from './src/screens/CreateRoutineScreen';
 import EditRoutineScreen from './src/screens/EditRoutineScreen';
 import ProgressScreen from './src/screens/ProgressScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
+import LoginScreen from './src/screens/LoginScreen';
+import RegisterScreen from './src/screens/RegisterScreen';
+import { AuthProvider } from './src/contexts/AuthContext';
+import { StorageProvider } from './src/contexts/StorageContext';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -51,44 +56,63 @@ function HistoryStack() {
   );
 }
 
+function SettingsStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="SettingsHome" component={SettingsScreen} options={{ title: 'Settings' }} />
+      <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
+      <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
+    </Stack.Navigator>
+  );
+}
+
 export default function App() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator 
-        screenOptions={{ 
-          headerShown: false,
-          tabBarActiveTintColor: '#000',
-          tabBarInactiveTintColor: '#8E8E93',
-          tabBarStyle: {
-            backgroundColor: '#FFF',
-            borderTopWidth: 1,
-            borderTopColor: '#D1D1D6',
-            height: 60,
-            paddingBottom: 8,
-          },
-          tabBarLabelStyle: {
-            fontSize: 12,
-            fontWeight: '600',
-            textTransform: 'uppercase',
-          }
-        }}
-      >
-        <Tab.Screen 
-          name="WorkoutsTab" 
-          component={WorkoutsStack} 
-          options={{ title: 'Workouts' }} 
-        />
-        <Tab.Screen 
-          name="HistoryTab" 
-          component={HistoryStack} 
-          options={{ title: 'History' }} 
-        />
-        <Tab.Screen 
-          name="ProgressTab" 
-          component={ProgressScreen} 
-          options={{ title: 'Progress' }} 
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <AuthProvider>
+      <StorageProvider>
+        <NavigationContainer>
+          <Tab.Navigator 
+            screenOptions={{ 
+              headerShown: false,
+              tabBarActiveTintColor: '#000',
+              tabBarInactiveTintColor: '#8E8E93',
+              tabBarStyle: {
+                backgroundColor: '#FFF',
+                borderTopWidth: 1,
+                borderTopColor: '#D1D1D6',
+                height: 60,
+                paddingBottom: 8,
+              },
+              tabBarLabelStyle: {
+                fontSize: 12,
+                fontWeight: '600',
+                textTransform: 'uppercase',
+              }
+            }}
+          >
+            <Tab.Screen 
+              name="WorkoutsTab" 
+              component={WorkoutsStack} 
+              options={{ title: 'Workouts' }} 
+            />
+            <Tab.Screen 
+              name="HistoryTab" 
+              component={HistoryStack} 
+              options={{ title: 'History' }} 
+            />
+            <Tab.Screen 
+              name="ProgressTab" 
+              component={ProgressScreen} 
+              options={{ title: 'Progress' }} 
+            />
+            <Tab.Screen 
+              name="SettingsTab" 
+              component={SettingsStack} 
+              options={{ title: 'Settings' }} 
+            />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </StorageProvider>
+    </AuthProvider>
   );
 }

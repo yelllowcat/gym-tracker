@@ -13,14 +13,12 @@
       "channel": "development"
     },
     "preview": {
-      "image": "latest",
       "distribution": "internal",
       "android": {
         "buildType": "apk"
       }
     },
     "production": {
-      "image": "latest",
       "android": {
         "buildType": "apk"
       }

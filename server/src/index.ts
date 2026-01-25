@@ -20,7 +20,7 @@ app.use('/analytics', analyticsRoutes);
 app.use('/sync', syncRoutes);
 
 app.get('/health', (req: Request, res: Response) => {
-  res.json({ status: 'ok' });
+  res.json({ status: 'ok', version: '1.0.1', timestamp: new Date().toISOString() });
 });
 
 const PORT = process.env.PORT || 3000;

@@ -1,6 +1,10 @@
-require('dotenv').config({
-  path: process.env.APP_ENV === 'production' ? '.env.production' : '.env.development'
-});
+try {
+  require('dotenv').config({
+    path: process.env.APP_ENV === 'production' ? '.env.production' : '.env.development'
+  });
+} catch (error) {
+  // Dotenv might not be available during certain build phases, fallback to environment variables
+}
 
 module.exports = {
   expo: {

@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { fetchAnalytics, fetchStreakData, AnalyticsStats, StreakData } from '../api/client';
+import { AnalyticsStats, StreakData } from '../api/client';
+import { useStorage } from '../contexts/StorageContext';
 import { getWeeklyGoal, setWeeklyGoal } from '../utils/storage';
 import TimeRangeSelector, { TimeRange } from '../components/TimeRangeSelector';
 import ExercisePicker from '../components/ExercisePicker';
@@ -15,6 +16,7 @@ import WeeklyStreakHistory from '../components/WeeklyStreakHistory';
 import WeeklyGoalSelector from '../components/WeeklyGoalSelector';
 
 export default function ProgressScreen() {
+  const { storageProvider } = useStorage();
   const [timeRange, setTimeRange] = useState<TimeRange>('30d');
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<AnalyticsStats | null>(null);
@@ -42,8 +44,8 @@ export default function ProgressScreen() {
     setLoading(true);
     try {
       const [analyticsData, streakInfo] = await Promise.all([
-        fetchAnalytics(timeRange),
-        fetchStreakData(weeklyGoal),
+        storageProvider.getAnalytics(timeRange),
+        storageProvider.getStreakData(weeklyGoal),
       ]);
       
       setStats(analyticsData);

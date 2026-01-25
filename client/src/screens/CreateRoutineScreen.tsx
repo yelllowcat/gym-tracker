@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { createRoutine } from '../api/client';
+import { useStorage } from '../contexts/StorageContext';
 
 interface ExerciseInput {
   name: string;
@@ -11,6 +11,7 @@ interface ExerciseInput {
 
 export default function CreateRoutineScreen() {
   const navigation = useNavigation();
+  const { storageProvider } = useStorage();
   const [name, setName] = useState('');
   const [exercises, setExercises] = useState<ExerciseInput[]>([
     { name: '', targetSets: '3', targetReps: '10' }
@@ -58,7 +59,7 @@ export default function CreateRoutineScreen() {
         }))
       };
 
-      await createRoutine(routineData);
+      await storageProvider.createRoutine(routineData);
       navigation.goBack();
     } catch (error: any) {
       console.error('Failed to create routine:', error);

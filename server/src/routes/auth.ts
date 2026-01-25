@@ -3,12 +3,19 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { prisma } from '../db';
 import { authMiddleware, AuthRequest } from '../middleware/auth';
+import fs from 'fs';
+
+const logToFile = (message: string) => {
+    fs.appendFileSync('/tmp/gym-tracker-debug.log', `${new Date().toISOString()} - ${message}\n`);
+};
 
 const router = express.Router();
 
 // Register new user
 router.post('/register', async (req: Request, res: Response): Promise<void> => {
     try {
+        logToFile(`[REGISTER] Received request: ${JSON.stringify({ email: req.body.email, hasPassword: !!req.body.password, name: req.body.name })}`);
+        console.log('[REGISTER] Received request:', { email: req.body.email, hasPassword: !!req.body.password, name: req.body.name });
         const { email, password, name } = req.body;
 
         // Validate input
@@ -60,8 +67,18 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
             },
         });
     } catch (error) {
-        console.error('Registration error:', error);
-        res.status(500).json({ error: 'Failed to register user' });
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        const errorStack = error instanceof Error ? error.stack : 'No stack';
+        logToFile(`[REGISTER ERROR] ${errorMsg}`);
+        logToFile(`[REGISTER ERROR STACK] ${errorStack}`);
+        console.error('[REGISTER ERROR] Full error:', error);
+        console.error('[REGISTER ERROR] Error type:', typeof error);
+        console.error('[REGISTER ERROR] Error message:', error instanceof Error ? error.message : String(error));
+        console.error('[REGISTER ERROR] Stack trace:', error instanceof Error ? error.stack : 'No stack trace');
+        res.status(500).json({ 
+            error: 'Failed to register user', 
+            details: error instanceof Error ? error.message : String(error) 
+        });
     }
 });
 

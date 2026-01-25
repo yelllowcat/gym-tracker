@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { fetchRoutineById, updateRoutine } from '../api/client';
+import { useStorage } from '../contexts/StorageContext';
 
 interface ExerciseInput {
   name: string;
@@ -14,6 +14,7 @@ type EditRoutineRouteProp = RouteProp<{ params: { routineId: string } }, 'params
 export default function EditRoutineScreen() {
   const navigation = useNavigation();
   const route = useRoute<EditRoutineRouteProp>();
+  const { storageProvider } = useStorage();
   const { routineId } = route.params;
 
   const [loading, setLoading] = useState(true);
@@ -28,7 +29,7 @@ export default function EditRoutineScreen() {
 
   const loadRoutine = async () => {
     try {
-      const routine = await fetchRoutineById(routineId);
+      const routine = await storageProvider.getRoutine(routineId);
       setName(routine.name);
       setExercises(
         routine.exercises.map(ex => ({
@@ -88,7 +89,7 @@ export default function EditRoutineScreen() {
         }))
       };
 
-      await updateRoutine(routineId, routineData);
+      await storageProvider.updateRoutine(routineId, routineData);
       navigation.goBack();
     } catch (error) {
       console.error('Failed to update routine:', error);
