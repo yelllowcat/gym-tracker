@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../contexts/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
+import { Colors } from '../constants/colors';
 
 export default function RegisterScreen() {
     const navigation = useNavigation();
@@ -54,6 +55,7 @@ export default function RegisterScreen() {
                     value={name}
                     onChangeText={setName}
                     placeholder="Enter your name"
+                    placeholderTextColor={Colors.TextSecondary}
                 />
 
                 <Text style={styles.label}>Email</Text>
@@ -62,6 +64,7 @@ export default function RegisterScreen() {
                     value={email}
                     onChangeText={setEmail}
                     placeholder="Enter your email"
+                    placeholderTextColor={Colors.TextSecondary}
                     autoCapitalize="none"
                     keyboardType="email-address"
                 />
@@ -73,6 +76,7 @@ export default function RegisterScreen() {
                         value={password}
                         onChangeText={setPassword}
                         placeholder="Create a password"
+                        placeholderTextColor={Colors.TextSecondary}
                         secureTextEntry={!showPassword}
                     />
                     <TouchableOpacity 
@@ -82,7 +86,7 @@ export default function RegisterScreen() {
                         <Ionicons 
                             name={showPassword ? 'eye-off' : 'eye'} 
                             size={22} 
-                            color="#8E8E93" 
+                            color={Colors.TextSecondary} 
                         />
                     </TouchableOpacity>
                 </View>
@@ -94,6 +98,7 @@ export default function RegisterScreen() {
                         value={confirmPassword}
                         onChangeText={setConfirmPassword}
                         placeholder="Confirm your password"
+                        placeholderTextColor={Colors.TextSecondary}
                         secureTextEntry={!showConfirmPassword}
                     />
                     <TouchableOpacity 
@@ -103,7 +108,7 @@ export default function RegisterScreen() {
                         <Ionicons 
                             name={showConfirmPassword ? 'eye-off' : 'eye'} 
                             size={22} 
-                            color="#8E8E93" 
+                            color={Colors.TextSecondary} 
                         />
                     </TouchableOpacity>
                 </View>
@@ -114,7 +119,7 @@ export default function RegisterScreen() {
                     disabled={isLoading}
                 >
                     {isLoading ? (
-                        <ActivityIndicator color="#FFF" />
+                        <ActivityIndicator color={Colors.TextInverse} />
                     ) : (
                         <Text style={styles.buttonText}>REGISTER</Text>
                     )}
@@ -134,7 +139,7 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFF',
+        backgroundColor: Colors.Background,
         padding: 20,
     },
     form: {
@@ -148,13 +153,13 @@ const styles = StyleSheet.create({
     brandName: {
         fontSize: 64,
         fontWeight: '900',
-        color: '#000',
+        color: Colors.TextPrimary,
         letterSpacing: 4,
     },
     tagline: {
         fontSize: 12,
         fontWeight: '700',
-        color: '#8E8E93',
+        color: Colors.TextSecondary,
         letterSpacing: 2,
         marginTop: -5,
     },
@@ -162,36 +167,38 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '600',
         marginBottom: 8,
-        color: '#000',
+        color: Colors.TextPrimary,
     },
     input: {
         borderWidth: 1,
-        borderColor: '#E5E5EA',
+        borderColor: Colors.Border,
         borderRadius: 8,
         padding: 12,
         fontSize: 16,
         marginBottom: 20,
-        backgroundColor: '#F2F2F7',
+        backgroundColor: Colors.Surface,
+        color: Colors.TextPrimary,
     },
     passwordContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: '#E5E5EA',
+        borderColor: Colors.Border,
         borderRadius: 8,
         marginBottom: 20,
-        backgroundColor: '#F2F2F7',
+        backgroundColor: Colors.Surface,
     },
     passwordInput: {
         flex: 1,
         padding: 12,
         fontSize: 16,
+        color: Colors.TextPrimary,
     },
     eyeIcon: {
         padding: 10,
     },
     button: {
-        backgroundColor: '#000',
+        backgroundColor: Colors.Primary,
         padding: 16,
         borderRadius: 8,
         alignItems: 'center',
@@ -201,7 +208,7 @@ const styles = StyleSheet.create({
         opacity: 0.7,
     },
     buttonText: {
-        color: '#FFF',
+        color: Colors.TextInverse,
         fontSize: 16,
         fontWeight: 'bold',
     },
@@ -211,10 +218,10 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     footerText: {
-        color: '#8E8E93',
+        color: Colors.TextSecondary,
     },
     link: {
-        color: '#007AFF',
+        color: Colors.Primary,
         fontWeight: '600',
     },
 });

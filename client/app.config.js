@@ -9,7 +9,7 @@ try {
 module.exports = {
   expo: {
     name: 'Rep',
-    slug: 'rep',
+    slug: 'gym-tracker',
     version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/icon.png',
@@ -56,10 +56,8 @@ module.exports = {
       apiUrl: process.env.API_URL,
       environment: process.env.APP_ENV || 'development'
     },
-    owner: 'vdavid_23',
-    runtimeVersion: {
-      policy: 'appVersion'
-    },
+    // Removed owner field to allow EAS to infer from login or context
+    runtimeVersion: '1.0.0',
     updates: {
       url: 'https://u.expo.dev/7112628a-a6ec-45a3-bd3b-1b218d4c7591'
     }
