@@ -7,6 +7,10 @@ dotenv.config();
 
 const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:g3vn3wtmqbys5xyd@gymtracker-j1lnpw:5432/gymtracker_db';
 
+if (!process.env.DATABASE_URL) {
+  console.warn('⚠️  WARNING: DATABASE_URL not found in src/db.ts env, using fallback connection string.');
+}
+
 if (!connectionString) {
   throw new Error('DATABASE_URL environment variable is not set');
 }

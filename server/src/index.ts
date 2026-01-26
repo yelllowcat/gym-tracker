@@ -24,6 +24,13 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 const PORT = process.env.PORT || 3000;
+
+console.log('Starting server...');
+console.log('Env Check:', {
+  DATABASE_URL_SET: !!process.env.DATABASE_URL,
+  NODE_ENV: process.env.NODE_ENV,
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

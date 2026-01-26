@@ -6,6 +6,7 @@ const databaseUrl = process.env.DATABASE_URL || 'postgresql://postgres:g3vn3wtmq
 
 if (!process.env.DATABASE_URL) {
   console.warn('⚠️  WARNING: DATABASE_URL not found in env, using fallback connection string.');
+  console.log('Available Env Vars:', Object.keys(process.env).sort().join(', '));
 }
 
 export default defineConfig({
