@@ -23,6 +23,7 @@ export default function EditRoutineScreen() {
 
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
+  const [focusedField, setFocusedField] = useState<string | null>(null);
   const [exercises, setExercises] = useState<ExerciseInput[]>([
     { name: '', targetSets: '3', targetReps: '10' }
   ]);
@@ -115,10 +116,15 @@ export default function EditRoutineScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Text style={styles.label}>ROUTINE NAME</Text>
         <TextInput
-          style={styles.mainInput}
+          style={[
+            styles.mainInput,
+            focusedField === 'routineName' && styles.inputFocused
+          ]}
           placeholder="e.g. UPPER BODY"
           value={name}
           onChangeText={setName}
+          onFocus={() => setFocusedField('routineName')}
+          onBlur={() => setFocusedField(null)}
           placeholderTextColor={Colors.TextSecondary}
         />
 
@@ -133,10 +139,15 @@ export default function EditRoutineScreen() {
             </View>
 
             <TextInput
-              style={styles.input}
+              style={[
+                styles.input,
+                focusedField === `name-${index}` && styles.inputFocused
+              ]}
               placeholder="NAME"
               value={exercise.name}
               onChangeText={(val) => updateExercise(index, 'name', val)}
+              onFocus={() => setFocusedField(`name-${index}`)}
+              onBlur={() => setFocusedField(null)}
               placeholderTextColor={Colors.TextSecondary}
             />
 
@@ -144,20 +155,30 @@ export default function EditRoutineScreen() {
               <View style={styles.field}>
                 <Text style={styles.subLabel}>TARGET SETS</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    focusedField === `sets-${index}` && styles.inputFocused
+                  ]}
                   keyboardType="numeric"
                   value={exercise.targetSets}
                   onChangeText={(val) => updateExercise(index, 'targetSets', val)}
+                  onFocus={() => setFocusedField(`sets-${index}`)}
+                  onBlur={() => setFocusedField(null)}
                   placeholderTextColor={Colors.TextSecondary}
                 />
               </View>
               <View style={styles.field}>
                 <Text style={styles.subLabel}>TARGET REPS</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    focusedField === `reps-${index}` && styles.inputFocused
+                  ]}
                   keyboardType="numeric"
                   value={exercise.targetReps}
                   onChangeText={(val) => updateExercise(index, 'targetReps', val)}
+                  onFocus={() => setFocusedField(`reps-${index}`)}
+                  onBlur={() => setFocusedField(null)}
                   placeholderTextColor={Colors.TextSecondary}
                 />
               </View>
@@ -234,6 +255,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.TextPrimary,
     fontWeight: '600',
+  },
+  inputFocused: {
+    borderColor: Colors.Primary,
+    backgroundColor: Colors.SurfaceHighlight,
   },
   exerciseCard: {
     backgroundColor: Colors.Surface,

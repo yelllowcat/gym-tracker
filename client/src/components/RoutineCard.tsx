@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   startButtonText: {
-    color: '#fff',
+    color: Colors.TextInverse,
     fontSize: 14,
     fontWeight: '800',
     letterSpacing: 2,
