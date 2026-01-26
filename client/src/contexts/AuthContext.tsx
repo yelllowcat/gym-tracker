@@ -116,7 +116,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             });
         } catch (error: any) {
             console.error('Login error:', error);
-            throw new Error(error.response?.data?.error || 'Login failed');
+            if (error.response?.data?.error) {
+                throw new Error(error.response.data.error);
+            } else if (error.request) {
+                throw new Error('Network error: Unable to connect to server. Please check your internet connection.');
+            }
+            throw new Error(error.message || 'Login failed');
         }
     };
 
@@ -142,7 +147,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             });
         } catch (error: any) {
             console.error('Registration error:', error);
-            throw new Error(error.response?.data?.error || 'Registration failed');
+            if (error.response?.data?.error) {
+                throw new Error(error.response.data.error);
+            } else if (error.request) {
+                throw new Error('Network error: Unable to connect to server. Please check your internet connection.');
+            }
+            throw new Error(error.message || 'Registration failed');
         }
     };
 
