@@ -6,6 +6,8 @@ interface WeeklyGoalSelectorProps {
   onSelectGoal: (goal: number) => void;
 }
 
+import { Colors } from '../constants/colors';
+
 export default function WeeklyGoalSelector({ currentGoal, onSelectGoal }: WeeklyGoalSelectorProps) {
   const goalOptions = [2, 3, 4, 5];
 
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 10,
     fontWeight: '900',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     letterSpacing: 1,
     marginBottom: 12,
   },
@@ -66,31 +68,31 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 8,
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
     borderRadius: 4,
     alignItems: 'center',
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Surface,
   },
   optionButtonSelected: {
-    backgroundColor: '#000',
-    borderColor: '#000',
+    backgroundColor: Colors.Primary,
+    borderColor: Colors.Primary,
   },
   optionText: {
     fontSize: 20,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     marginBottom: 2,
   },
   optionTextSelected: {
-    color: '#FFF',
+    color: Colors.TextInverse,
   },
   optionSubtext: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     textTransform: 'uppercase',
   },
   optionSubtextSelected: {
-    color: '#8E8E93',
+    color: Colors.TextInverse,
   },
 });

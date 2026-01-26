@@ -7,6 +7,8 @@ interface WeeklyStreakHistoryProps {
   weeklyGoal: number;
 }
 
+import { Colors } from '../constants/colors';
+
 export default function WeeklyStreakHistory({ weeklyHistory, weeklyGoal }: WeeklyStreakHistoryProps) {
   const [expanded, setExpanded] = useState(false);
 
@@ -86,9 +88,9 @@ export default function WeeklyStreakHistory({ weeklyHistory, weeklyGoal }: Weekl
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Surface,
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
     borderRadius: 4,
     padding: 16,
     marginVertical: 8,
@@ -96,13 +98,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1,
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 11,
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     marginBottom: 16,
   },
   weekItem: {
@@ -111,7 +113,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
+    borderBottomColor: Colors.Border,
   },
   lastItem: {
     borderBottomWidth: 0,
@@ -122,12 +124,12 @@ const styles = StyleSheet.create({
   weekRange: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000',
+    color: Colors.TextPrimary,
     marginBottom: 2,
   },
   workoutCount: {
     fontSize: 12,
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
   },
   statusContainer: {
     marginLeft: 12,
@@ -136,29 +138,29 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#000',
+    backgroundColor: Colors.Primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
   checkMarkText: {
     fontSize: 16,
     fontWeight: '900',
-    color: '#FFF',
+    color: Colors.TextInverse,
   },
   crossMark: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: Colors.Surface,
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
     justifyContent: 'center',
     alignItems: 'center',
   },
   crossMarkText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
   },
   toggleButton: {
     marginTop: 12,
@@ -168,7 +170,7 @@ const styles = StyleSheet.create({
   toggleButtonText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#3A3A3C',
+    color: Colors.TextSecondary,
     letterSpacing: 0.5,
   },
 });

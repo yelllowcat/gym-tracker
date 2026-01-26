@@ -12,6 +12,8 @@ interface ExerciseInput {
 
 type EditRoutineRouteProp = RouteProp<{ params: { routineId: string } }, 'params'>;
 
+import { Colors } from '../constants/colors';
+
 export default function EditRoutineScreen() {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
@@ -117,7 +119,7 @@ export default function EditRoutineScreen() {
           placeholder="e.g. UPPER BODY"
           value={name}
           onChangeText={setName}
-          placeholderTextColor="#D1D1D6"
+          placeholderTextColor={Colors.TextSecondary}
         />
 
         <Text style={styles.sectionTitle}>EXERCISES</Text>
@@ -135,7 +137,7 @@ export default function EditRoutineScreen() {
               placeholder="NAME"
               value={exercise.name}
               onChangeText={(val) => updateExercise(index, 'name', val)}
-              placeholderTextColor="#D1D1D6"
+              placeholderTextColor={Colors.TextSecondary}
             />
 
             <View style={styles.row}>
@@ -146,7 +148,7 @@ export default function EditRoutineScreen() {
                   keyboardType="numeric"
                   value={exercise.targetSets}
                   onChangeText={(val) => updateExercise(index, 'targetSets', val)}
-                  placeholderTextColor="#D1D1D6"
+                  placeholderTextColor={Colors.TextSecondary}
                 />
               </View>
               <View style={styles.field}>
@@ -156,7 +158,7 @@ export default function EditRoutineScreen() {
                   keyboardType="numeric"
                   value={exercise.targetReps}
                   onChangeText={(val) => updateExercise(index, 'targetReps', val)}
-                  placeholderTextColor="#D1D1D6"
+                  placeholderTextColor={Colors.TextSecondary}
                 />
               </View>
             </View>
@@ -180,7 +182,7 @@ export default function EditRoutineScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Background,
   },
   loadingContainer: {
     justifyContent: 'center',
@@ -190,7 +192,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 12,
     fontWeight: '900',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     letterSpacing: 1,
   },
   scrollContent: {
@@ -201,7 +203,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '900',
     marginBottom: 12,
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1,
   },
   sectionTitle: {
@@ -209,34 +211,34 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     marginTop: 32,
     marginBottom: 16,
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1,
     borderBottomWidth: 2,
-    borderBottomColor: '#000',
+    borderBottomColor: Colors.TextPrimary,
     paddingBottom: 4,
     alignSelf: 'flex-start',
   },
   mainInput: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#000',
+    color: Colors.TextPrimary,
     borderBottomWidth: 1,
-    borderBottomColor: '#D1D1D6',
+    borderBottomColor: Colors.Border,
     paddingVertical: 8,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
     borderRadius: 2,
     padding: 12,
     fontSize: 14,
-    color: '#000',
+    color: Colors.TextPrimary,
     fontWeight: '600',
   },
   exerciseCard: {
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Surface,
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
     borderRadius: 4,
     padding: 16,
     marginBottom: 16,
@@ -250,10 +252,10 @@ const styles = StyleSheet.create({
   exerciseNumber: {
     fontSize: 10,
     fontWeight: '900',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
   },
   removeText: {
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     fontWeight: '800',
     fontSize: 10,
   },
@@ -268,7 +270,7 @@ const styles = StyleSheet.create({
   subLabel: {
     fontSize: 9,
     fontWeight: '900',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     marginBottom: 6,
     letterSpacing: 0.5,
   },
@@ -277,12 +279,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 8,
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
     borderStyle: 'dashed',
     borderRadius: 4,
   },
   addButtonText: {
-    color: '#3A3A3C',
+    color: Colors.TextSecondary,
     fontWeight: '800',
     fontSize: 13,
     letterSpacing: 1,
@@ -292,19 +294,19 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.Background,
     padding: 24,
     borderTopWidth: 1,
-    borderTopColor: '#D1D1D6',
+    borderTopColor: Colors.Border,
   },
   saveButton: {
-    backgroundColor: '#000',
+    backgroundColor: Colors.Primary,
     paddingVertical: 16,
     borderRadius: 2,
     alignItems: 'center',
   },
   saveButtonText: {
-    color: '#fff',
+    color: Colors.TextInverse,
     fontSize: 14,
     fontWeight: '900',
     letterSpacing: 2,

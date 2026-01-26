@@ -8,6 +8,8 @@ interface TimeRangeSelectorProps {
   onSelect: (range: TimeRange) => void;
 }
 
+import { Colors } from '../constants/colors';
+
 export default function TimeRangeSelector({ selected, onSelect }: TimeRangeSelectorProps) {
   const ranges: { value: TimeRange; label: string }[] = [
     { value: '7d', label: '7D' },
@@ -52,23 +54,23 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderWidth: 1,
-    borderColor: '#D1D1D6',
-    backgroundColor: '#FFF',
+    borderColor: Colors.Border,
+    backgroundColor: Colors.Surface,
     marginHorizontal: 4,
     borderRadius: 2,
     alignItems: 'center',
   },
   buttonSelected: {
-    backgroundColor: '#000',
-    borderColor: '#000',
+    backgroundColor: Colors.Primary,
+    borderColor: Colors.Primary,
   },
   buttonText: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1,
   },
   buttonTextSelected: {
-    color: '#FFF',
+    color: Colors.TextInverse,
   },
 });

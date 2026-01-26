@@ -16,6 +16,8 @@ import StreakCalendar from '../components/StreakCalendar';
 import WeeklyStreakHistory from '../components/WeeklyStreakHistory';
 import WeeklyGoalSelector from '../components/WeeklyGoalSelector';
 
+import { Colors } from '../constants/colors';
+
 export default function ProgressScreen() {
   const insets = useSafeAreaInsets();
   const { storageProvider } = useStorage();
@@ -139,9 +141,9 @@ export default function ProgressScreen() {
         </View>
 
         <View style={styles.statGrid}>
-          <View style={[styles.statBox, { backgroundColor: '#000' }]}>
-            <Text style={[styles.statLabel, { color: '#8E8E93' }]}>TOTAL VOLUME</Text>
-            <Text style={[styles.statValue, { color: '#FFF', fontSize: 28 }]}>
+          <View style={[styles.statBox, { backgroundColor: Colors.Primary }]}>
+            <Text style={[styles.statLabel, { color: Colors.TextSecondary }]}>TOTAL VOLUME</Text>
+            <Text style={[styles.statValue, { color: Colors.TextInverse, fontSize: 28 }]}>
               {(stats.totalVolume / 1000).toFixed(1)}k
             </Text>
           </View>
@@ -231,19 +233,19 @@ export default function ProgressScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Background,
   },
   header: {
     paddingHorizontal: 24,
     paddingBottom: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#D1D1D6',
+    borderBottomColor: Colors.Border,
   },
   headerTitle: {
     fontSize: 16,
     fontWeight: '900',
     letterSpacing: 2,
-    color: '#000',
+    color: Colors.TextPrimary,
   },
   content: {
     padding: 24,
@@ -258,7 +260,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 12,
     fontWeight: '900',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     letterSpacing: 1,
   },
   emptyContainer: {
@@ -269,7 +271,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     textAlign: 'center',
   },
   statGrid: {
@@ -279,9 +281,9 @@ const styles = StyleSheet.create({
   },
   statBox: {
     flex: 0.48,
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Surface,
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
     borderRadius: 4,
     padding: 20,
     alignItems: 'center',
@@ -290,17 +292,17 @@ const styles = StyleSheet.create({
   statLabel: {
     fontSize: 9,
     fontWeight: '900',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     letterSpacing: 1,
     marginBottom: 8,
   },
   statValue: {
     fontSize: 32,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
   },
   infoCard: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: Colors.Surface,
     padding: 24,
     borderRadius: 4,
     marginTop: 16,
@@ -308,14 +310,14 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 12,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1,
     marginBottom: 12,
   },
   infoText: {
     fontSize: 14,
     lineHeight: 20,
-    color: '#3A3A3C',
+    color: Colors.TextSecondary,
     fontWeight: '500',
   },
 });

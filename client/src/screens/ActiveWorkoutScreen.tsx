@@ -23,6 +23,8 @@ interface WorkoutExercise {
   sets: WorkoutSet[];
 }
 
+import { Colors } from '../constants/colors';
+
 export default function ActiveWorkoutScreen() {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
@@ -108,7 +110,7 @@ export default function ActiveWorkoutScreen() {
                 <Text style={[styles.setText, { flex: 0.8 }]}>{setIndex + 1}</Text>
                 
                 <TextInput
-                  placeholderTextColor="#D1D1D6"
+                  placeholderTextColor={Colors.TextSecondary}
                   style={styles.input}
                   placeholder="0"
                   keyboardType="numeric"
@@ -117,7 +119,7 @@ export default function ActiveWorkoutScreen() {
                 />
                 
                 <TextInput
-                  placeholderTextColor="#D1D1D6"
+                  placeholderTextColor={Colors.TextSecondary}
                   style={styles.input}
                   placeholder="0"
                   keyboardType="numeric"
@@ -126,7 +128,7 @@ export default function ActiveWorkoutScreen() {
                 />
                 
                 <TextInput
-                  placeholderTextColor="#D1D1D6"
+                  placeholderTextColor={Colors.TextSecondary}
                   style={styles.input}
                   placeholder="0"
                   keyboardType="numeric"
@@ -162,7 +164,7 @@ export default function ActiveWorkoutScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Background,
   },
   header: {
     flexDirection: 'row',
@@ -171,18 +173,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingBottom: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#D1D1D6',
+    borderBottomColor: Colors.Border,
   },
   headerTitle: {
     fontSize: 16,
     fontWeight: '900',
     letterSpacing: 2,
-    color: '#000',
+    color: Colors.TextPrimary,
   },
   finishText: {
     fontSize: 14,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1,
   },
   list: {
@@ -195,7 +197,7 @@ const styles = StyleSheet.create({
   exerciseName: {
     fontSize: 18,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     marginBottom: 20,
     letterSpacing: 1,
   },
@@ -208,7 +210,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 10,
     fontWeight: '800',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     textAlign: 'center',
     letterSpacing: 0.5,
   },
@@ -217,16 +219,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
+    borderBottomColor: Colors.Surface,
   },
   completedRow: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: Colors.Surface,
     borderRadius: 4,
   },
   setText: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#000',
+    color: Colors.TextPrimary,
     textAlign: 'center',
   },
   input: {
@@ -236,24 +238,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     fontWeight: '700',
-    color: '#000',
+    color: Colors.TextPrimary,
   },
   checkButton: {
     height: 32,
     marginHorizontal: 4,
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Background,
   },
   checkButtonActive: {
-    backgroundColor: '#000',
-    borderColor: '#000',
+    backgroundColor: Colors.Primary,
+    borderColor: Colors.Primary,
   },
   checkMarkText: {
-    color: '#FFF',
+    color: Colors.TextInverse,
     fontSize: 14,
     fontWeight: '900',
   },
@@ -266,14 +268,14 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
     borderStyle: 'dashed',
     borderRadius: 4,
   },
   addSetText: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     letterSpacing: 1,
   },
 });

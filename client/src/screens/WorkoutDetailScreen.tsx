@@ -10,6 +10,8 @@ type RootStackParamList = {
 
 type WorkoutDetailRouteProp = RouteProp<RootStackParamList, 'WorkoutDetail'>;
 
+import { Colors } from '../constants/colors';
+
 export default function WorkoutDetailScreen() {
   const route = useRoute<WorkoutDetailRouteProp>();
   const { storageProvider } = useStorage();
@@ -53,7 +55,7 @@ export default function WorkoutDetailScreen() {
   if (loading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color="#000" />
+        <ActivityIndicator size="large" color={Colors.TextPrimary} />
       </View>
     );
   }
@@ -103,7 +105,7 @@ export default function WorkoutDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Background,
   },
   content: {
     padding: 24,
@@ -113,7 +115,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Background,
   },
   headerSection: {
     marginBottom: 40,
@@ -121,27 +123,27 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1,
     marginBottom: 8,
   },
   date: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     letterSpacing: 1,
     marginBottom: 16,
   },
   divider: {
     height: 4,
     width: 40,
-    backgroundColor: '#000',
+    backgroundColor: Colors.TextPrimary,
     marginBottom: 16,
   },
   duration: {
     fontSize: 11,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1.5,
   },
   exerciseCard: {
@@ -150,25 +152,25 @@ const styles = StyleSheet.create({
   exerciseName: {
     fontSize: 16,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     marginBottom: 16,
     letterSpacing: 1,
   },
   table: {
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
     borderRadius: 4,
     overflow: 'hidden',
   },
   tableHeader: {
     flexDirection: 'row',
-    backgroundColor: '#000',
+    backgroundColor: Colors.Surface,
     paddingVertical: 10,
   },
   headerCell: {
     flex: 1,
     textAlign: 'center',
-    color: '#FFF',
+    color: Colors.TextSecondary,
     fontSize: 10,
     fontWeight: '900',
     letterSpacing: 1,
@@ -177,22 +179,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
+    borderBottomColor: Colors.Border,
   },
   alternateRow: {
-    backgroundColor: '#F9F9FB',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
   },
   cell: {
     flex: 1,
     textAlign: 'center',
     fontSize: 14,
     fontWeight: '700',
-    color: '#3A3A3C',
+    color: Colors.TextPrimary,
   },
   errorText: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1,
   },
 });

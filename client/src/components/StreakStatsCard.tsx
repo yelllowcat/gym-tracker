@@ -8,6 +8,8 @@ interface StreakStatsCardProps {
   weeklyGoal: number;
 }
 
+import { Colors } from '../constants/colors';
+
 export default function StreakStatsCard({
   currentStreak,
   longestStreak,
@@ -43,14 +45,14 @@ export default function StreakStatsCard({
         
         <View style={styles.progressBarContainer}>
           <View
-            style={[
-              styles.progressBarFill,
-              {
-                width: `${Math.min(progressPercentage, 100)}%`,
-                backgroundColor: isGoalMet ? '#000' : '#8E8E93',
-              },
-            ]}
-          />
+              style={[
+                styles.progressBarFill,
+                {
+                  width: `${Math.min(progressPercentage, 100)}%`,
+                  backgroundColor: isGoalMet ? Colors.Primary : Colors.TextSecondary,
+                },
+              ]}
+            />
         </View>
 
         {isGoalMet && (
@@ -73,9 +75,9 @@ export default function StreakStatsCard({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Surface,
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
     borderRadius: 4,
     padding: 20,
     marginVertical: 8,
@@ -83,7 +85,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1,
     marginBottom: 20,
   },
@@ -92,7 +94,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   streakBadge: {
-    backgroundColor: '#000',
+    backgroundColor: Colors.Primary,
     paddingVertical: 24,
     paddingHorizontal: 32,
     borderRadius: 4,
@@ -106,13 +108,13 @@ const styles = StyleSheet.create({
   streakNumber: {
     fontSize: 48,
     fontWeight: '900',
-    color: '#FFF',
+    color: Colors.TextInverse,
     lineHeight: 52,
   },
   streakLabel: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#8E8E93',
+    color: Colors.TextInverse,
     letterSpacing: 1,
     marginTop: 4,
   },
@@ -128,17 +130,17 @@ const styles = StyleSheet.create({
   progressLabel: {
     fontSize: 10,
     fontWeight: '900',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     letterSpacing: 1,
   },
   progressText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#000',
+    color: Colors.TextPrimary,
   },
   progressBarContainer: {
     height: 8,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: Colors.Background,
     borderRadius: 4,
     overflow: 'hidden',
   },
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
   goalMetText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#000',
+    color: Colors.TextPrimary,
     marginTop: 8,
     textAlign: 'center',
     letterSpacing: 0.5,
@@ -160,17 +162,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: '#F2F2F7',
+    borderTopColor: Colors.Border,
   },
   bestStreakLabel: {
     fontSize: 10,
     fontWeight: '900',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     letterSpacing: 1,
   },
   bestStreakValue: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#000',
+    color: Colors.TextPrimary,
   },
 });

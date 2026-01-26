@@ -7,6 +7,8 @@ interface PersonalRecordsCardProps {
   maxRecords?: number;
 }
 
+import { Colors } from '../constants/colors';
+
 export default function PersonalRecordsCard({ exercises, maxRecords = 5 }: PersonalRecordsCardProps) {
   // Sort by max weight descending and take top records
   const topRecords = exercises
@@ -60,9 +62,9 @@ export default function PersonalRecordsCard({ exercises, maxRecords = 5 }: Perso
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Surface,
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
     borderRadius: 4,
     padding: 20,
     marginVertical: 8,
@@ -70,18 +72,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1,
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 11,
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     marginBottom: 16,
   },
   emptyText: {
     fontSize: 13,
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     textAlign: 'center',
     paddingVertical: 20,
     fontStyle: 'italic',
@@ -91,13 +93,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
+    borderBottomColor: Colors.Border,
   },
   recordRank: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#000',
+    backgroundColor: Colors.Primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -105,7 +107,7 @@ const styles = StyleSheet.create({
   rankNumber: {
     fontSize: 14,
     fontWeight: '900',
-    color: '#FFF',
+    color: Colors.TextInverse,
   },
   recordInfo: {
     flex: 1,
@@ -113,12 +115,12 @@ const styles = StyleSheet.create({
   exerciseName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#000',
+    color: Colors.TextPrimary,
     marginBottom: 2,
   },
   recordDate: {
     fontSize: 11,
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
   },
   recordWeight: {
     flexDirection: 'row',
@@ -127,12 +129,12 @@ const styles = StyleSheet.create({
   weightValue: {
     fontSize: 24,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
   },
   weightUnit: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     marginLeft: 2,
   },
 });

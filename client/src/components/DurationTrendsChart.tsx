@@ -7,6 +7,8 @@ interface DurationTrendsChartProps {
   timeRange: string;
 }
 
+import { Colors } from '../constants/colors';
+
 export default function DurationTrendsChart({ timeRange }: DurationTrendsChartProps) {
   const [loading, setLoading] = useState(true);
   const [workouts, setWorkouts] = useState<Workout[]>([]);
@@ -104,11 +106,11 @@ export default function DurationTrendsChart({ timeRange }: DurationTrendsChartPr
   };
 
   const chartConfig = {
-    backgroundColor: '#FFF',
-    backgroundGradientFrom: '#FFF',
-    backgroundGradientTo: '#FFF',
+    backgroundColor: Colors.Surface,
+    backgroundGradientFrom: Colors.Surface,
+    backgroundGradientTo: Colors.Surface,
     decimalPlaces: 0,
-    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
     labelColor: (opacity = 1) => `rgba(142, 142, 147, ${opacity})`,
     style: {
       borderRadius: 4,
@@ -116,12 +118,12 @@ export default function DurationTrendsChart({ timeRange }: DurationTrendsChartPr
     propsForDots: {
       r: '4',
       strokeWidth: '2',
-      stroke: '#000',
-      fill: '#FFF',
+      stroke: Colors.TextPrimary,
+      fill: Colors.Surface,
     },
     propsForBackgroundLines: {
       strokeDasharray: '',
-      stroke: '#F2F2F7',
+      stroke: Colors.Border,
       strokeWidth: 1,
     },
   };
@@ -172,9 +174,9 @@ export default function DurationTrendsChart({ timeRange }: DurationTrendsChartPr
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Surface,
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
     borderRadius: 4,
     padding: 16,
     marginVertical: 8,
@@ -182,13 +184,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1,
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 11,
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     marginBottom: 16,
   },
   chart: {
@@ -201,7 +203,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: '#F2F2F7',
+    borderTopColor: Colors.Border,
   },
   statItem: {
     alignItems: 'center',
@@ -209,14 +211,14 @@ const styles = StyleSheet.create({
   statLabel: {
     fontSize: 9,
     fontWeight: '900',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     letterSpacing: 0.5,
     marginBottom: 4,
   },
   statValue: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#000',
+    color: Colors.TextPrimary,
   },
   loadingContainer: {
     height: 200,
@@ -231,7 +233,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 13,
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     textAlign: 'center',
     fontStyle: 'italic',
   },

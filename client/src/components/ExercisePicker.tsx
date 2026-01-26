@@ -10,6 +10,8 @@ interface ExercisePickerProps {
   maxSelections?: number;
 }
 
+import { Colors } from '../constants/colors';
+
 export default function ExercisePicker({
   exercises,
   selectedExercises,
@@ -108,13 +110,13 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 12,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1,
   },
   addButton: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 0.5,
   },
   pillContainer: {
@@ -124,7 +126,7 @@ const styles = StyleSheet.create({
   pill: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#000',
+    backgroundColor: Colors.Primary,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
@@ -134,29 +136,29 @@ const styles = StyleSheet.create({
   pillText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FFF',
+    color: Colors.TextInverse,
     marginRight: 6,
   },
   removeButton: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFF',
+    color: Colors.TextInverse,
     lineHeight: 20,
   },
   emptyText: {
     fontSize: 13,
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     fontStyle: 'italic',
     textAlign: 'center',
     paddingVertical: 16,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Surface,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     paddingBottom: 40,
@@ -168,18 +170,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#D1D1D6',
+    borderBottomColor: Colors.Border,
   },
   modalTitle: {
     fontSize: 14,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1,
   },
   modalClose: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     letterSpacing: 0.5,
   },
   modalList: {
@@ -188,16 +190,16 @@ const styles = StyleSheet.create({
   exerciseItem: {
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
+    borderBottomColor: Colors.Border,
   },
   exerciseName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#000',
+    color: Colors.TextPrimary,
     marginBottom: 4,
   },
   exerciseStats: {
     fontSize: 12,
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
   },
 });

@@ -7,6 +7,8 @@ interface StreakCalendarProps {
   onDayPress?: (date: string) => void;
 }
 
+import { Colors } from '../constants/colors';
+
 export default function StreakCalendar({ calendarData, onDayPress }: StreakCalendarProps) {
   if (calendarData.length === 0) {
     return (
@@ -21,17 +23,17 @@ export default function StreakCalendar({ calendarData, onDayPress }: StreakCalen
   const getIntensityColor = (intensity: number): string => {
     switch (intensity) {
       case 0:
-        return '#F2F2F7'; // Very light gray
+        return Colors.Surface; // Very light gray (was #F2F2F7) -> now Surface
       case 1:
-        return '#D1D1D6'; // Light gray
+        return '#3A3A3C'; // Light gray -> Dark gray
       case 2:
-        return '#8E8E93'; // Medium gray
+        return '#636366'; // Medium gray
       case 3:
-        return '#3A3A3C'; // Dark gray
+        return '#8E8E93'; // Dark gray -> Light gray
       case 4:
-        return '#000000'; // Black
+        return Colors.Primary; // Black -> White
       default:
-        return '#F2F2F7';
+        return Colors.Surface;
     }
   };
 
@@ -116,9 +118,9 @@ export default function StreakCalendar({ calendarData, onDayPress }: StreakCalen
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Surface,
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
     borderRadius: 4,
     padding: 16,
     marginVertical: 8,
@@ -126,18 +128,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     letterSpacing: 1,
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 11,
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     marginBottom: 16,
   },
   emptyText: {
     fontSize: 13,
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     textAlign: 'center',
     paddingVertical: 20,
     fontStyle: 'italic',
@@ -166,7 +168,7 @@ const styles = StyleSheet.create({
   dayLabel: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
   },
   weekColumn: {
     marginRight: 2,
@@ -181,7 +183,7 @@ const styles = StyleSheet.create({
   weekLabel: {
     fontSize: 8,
     fontWeight: '700',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
   },
   dayCell: {
     width: 14,
@@ -194,14 +196,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   todayCell: {
-    borderColor: '#000',
+    borderColor: Colors.TextPrimary,
     borderWidth: 1.5,
   },
   todayIndicator: {
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.TextInverse,
   },
   legend: {
     flexDirection: 'row',
@@ -209,12 +211,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F2F2F7',
+    borderTopColor: Colors.Border,
   },
   legendLabel: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     marginHorizontal: 6,
   },
   legendCell: {
@@ -223,6 +225,6 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginHorizontal: 2,
     borderWidth: 1,
-    borderColor: '#D1D1D6',
+    borderColor: Colors.Border,
   },
 });

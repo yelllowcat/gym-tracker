@@ -4,6 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../contexts/AuthContext';
 import { useStorage } from '../contexts/StorageContext';
 
+import { Colors } from '../constants/colors';
+
 export default function SettingsScreen() {
     const insets = useSafeAreaInsets();
     const { user, logout } = useAuth();
@@ -90,7 +92,7 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F2F2F7',
+        backgroundColor: Colors.Background,
     },
     section: {
         marginTop: 24,
@@ -99,13 +101,13 @@ const styles = StyleSheet.create({
     sectionTitle: {
         fontSize: 13,
         fontWeight: '600',
-        color: '#8E8E93',
+        color: Colors.TextSecondary,
         textTransform: 'uppercase',
         marginBottom: 8,
         marginLeft: 16,
     },
     card: {
-        backgroundColor: '#FFF',
+        backgroundColor: Colors.Surface,
         borderRadius: 10,
         padding: 16,
         shadowColor: '#000',
@@ -123,28 +125,28 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 25,
-        backgroundColor: '#000',
+        backgroundColor: Colors.Primary,
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 16,
     },
     avatarText: {
-        color: '#FFF',
+        color: Colors.TextInverse,
         fontSize: 20,
         fontWeight: 'bold',
     },
     userName: {
         fontSize: 18,
         fontWeight: '600',
-        color: '#000',
+        color: Colors.TextPrimary,
     },
     userEmail: {
         fontSize: 14,
-        color: '#8E8E93',
+        color: Colors.TextSecondary,
     },
     description: {
         fontSize: 14,
-        color: '#3A3A3C',
+        color: Colors.TextSecondary,
         marginBottom: 16,
         lineHeight: 20,
     },
@@ -154,10 +156,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     primaryButton: {
-        backgroundColor: '#000',
+        backgroundColor: Colors.Primary,
     },
     primaryButtonText: {
-        color: '#FFF',
+        color: Colors.TextInverse,
         fontWeight: '700',
         letterSpacing: 1,
     },
@@ -166,17 +168,17 @@ const styles = StyleSheet.create({
     },
     logoutButton: {
         padding: 12,
-        backgroundColor: '#F2F2F7',
+        backgroundColor: Colors.Background,
         borderRadius: 8,
         alignItems: 'center',
     },
     logoutText: {
-        color: '#FF3B30',
+        color: Colors.Error,
         fontWeight: '600',
     },
     versionText: {
         textAlign: 'center',
-        color: '#8E8E93',
+        color: Colors.TextSecondary,
         marginTop: 20,
         marginBottom: 40,
         fontSize: 12,

@@ -9,6 +9,8 @@ type RootStackParamList = {
   WorkoutDetail: { workoutId: string };
 };
 
+import { Colors } from '../constants/colors';
+
 export default function HistoryScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { storageProvider } = useStorage();
@@ -79,29 +81,33 @@ export default function HistoryScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: Colors.Background,
   },
   header: {
     paddingHorizontal: 24,
     paddingTop: 60,
     paddingBottom: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#D1D1D6',
+    borderBottomColor: Colors.Border,
   },
   headerTitle: {
     fontSize: 16,
     fontWeight: '900',
     letterSpacing: 2,
-    color: '#000',
+    color: Colors.TextPrimary,
   },
   list: {
     padding: 24,
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.Surface,
     paddingVertical: 20,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    borderWidth: 1,
     borderBottomWidth: 1,
-    borderBottomColor: '#D1D1D6',
+    borderColor: Colors.Border,
+    borderBottomColor: Colors.Border,
     marginBottom: 10,
   },
   cardHeader: {
@@ -110,25 +116,25 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   date: {
-    color: '#000',
+    color: Colors.TextPrimary,
     fontSize: 12,
     fontWeight: '800',
     letterSpacing: 1,
   },
   duration: {
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     fontSize: 11,
     fontWeight: '700',
   },
   name: {
     fontSize: 20,
     fontWeight: '900',
-    color: '#000',
+    color: Colors.TextPrimary,
     marginBottom: 6,
     letterSpacing: 0.5,
   },
   exercisesCount: {
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 0.5,
@@ -136,7 +142,7 @@ const styles = StyleSheet.create({
   emptyText: {
     textAlign: 'center',
     marginTop: 40,
-    color: '#8E8E93',
+    color: Colors.TextSecondary,
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 1,
