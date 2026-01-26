@@ -17,6 +17,10 @@ app.use((req, res, next) => {
 });
 
 // Public routes
+app.get('/', (req: Request, res: Response) => {
+  res.json({ status: 'Gym Tracker API is running', version: '1.0.0' });
+});
+
 app.use('/auth', authRoutes);
 
 // Protected routes (require authentication)
