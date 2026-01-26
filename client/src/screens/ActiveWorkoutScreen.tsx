@@ -32,6 +32,7 @@ export default function ActiveWorkoutScreen() {
   const { storageProvider } = useStorage();
   const { routine } = route.params;
   const startTime = React.useRef(new Date()).current;
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const [exercises, setExercises] = useState<WorkoutExercise[]>(
     routine.exercises.map(ex => ({
@@ -48,10 +49,15 @@ export default function ActiveWorkoutScreen() {
 
   const updateSet = (exerciseIndex: number, setIndex: number, field: keyof WorkoutSet, value: string | boolean) => {
     const newExercises = [...exercises];
-    newExercises[exerciseIndex].sets[setIndex] = {
-      ...newExercises[exerciseIndex].sets[setIndex],
-      [field]: value
-    };
+    const currentSet = { ...newExercises[exerciseIndex].sets[setIndex], [field]: value };
+    
+    // Auto-complete if all fields are filled
+    if (field !== 'completed') {
+      const { weight, reps, rir } = currentSet;
+      currentSet.completed = !!(weight && reps && rir);
+    }
+
+    newExercises[exerciseIndex].sets[setIndex] = currentSet;
     setExercises(newExercises);
   };
 
@@ -102,7 +108,6 @@ export default function ActiveWorkoutScreen() {
               <Text style={styles.colLabel}>KG</Text>
               <Text style={styles.colLabel}>REPS</Text>
               <Text style={styles.colLabel}>RIR</Text>
-              <Text style={[styles.colLabel, { flex: 0.8 }]}>DONE</Text>
             </View>
 
             {exercise.sets.map((set, setIndex) => (
@@ -111,41 +116,45 @@ export default function ActiveWorkoutScreen() {
                 
                 <TextInput
                   placeholderTextColor={Colors.TextSecondary}
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    focusedField === `${exerciseIndex}-${setIndex}-weight` && styles.inputFocused
+                  ]}
                   placeholder="0"
                   keyboardType="numeric"
                   value={set.weight}
                   onChangeText={(text) => updateSet(exerciseIndex, setIndex, 'weight', text)}
+                  onFocus={() => setFocusedField(`${exerciseIndex}-${setIndex}-weight`)}
+                  onBlur={() => setFocusedField(null)}
                 />
                 
                 <TextInput
                   placeholderTextColor={Colors.TextSecondary}
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    focusedField === `${exerciseIndex}-${setIndex}-reps` && styles.inputFocused
+                  ]}
                   placeholder="0"
                   keyboardType="numeric"
                   value={set.reps}
                   onChangeText={(text) => updateSet(exerciseIndex, setIndex, 'reps', text)}
+                  onFocus={() => setFocusedField(`${exerciseIndex}-${setIndex}-reps`)}
+                  onBlur={() => setFocusedField(null)}
                 />
                 
                 <TextInput
                   placeholderTextColor={Colors.TextSecondary}
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    focusedField === `${exerciseIndex}-${setIndex}-rir` && styles.inputFocused
+                  ]}
                   placeholder="0"
                   keyboardType="numeric"
                   value={set.rir}
                   onChangeText={(text) => updateSet(exerciseIndex, setIndex, 'rir', text)}
+                  onFocus={() => setFocusedField(`${exerciseIndex}-${setIndex}-rir`)}
+                  onBlur={() => setFocusedField(null)}
                 />
-
-                <TouchableOpacity
-                  style={[styles.checkButton, set.completed && styles.checkButtonActive, { flex: 0.8 }]}
-                  onPress={() => updateSet(exerciseIndex, setIndex, 'completed', !set.completed)}
-                >
-                  {set.completed ? (
-                    <Text style={styles.checkMarkText}>✓</Text>
-                  ) : (
-                    <View style={styles.checkMarkPlaceholder} />
-                  )}
-                </TouchableOpacity>
               </View>
             ))}
 
@@ -239,6 +248,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: Colors.TextPrimary,
+    borderWidth: 1,
+    borderColor: 'transparent',
+    borderRadius: 4,
+  },
+  inputFocused: {
+    borderColor: Colors.Primary,
+    backgroundColor: Colors.SurfaceHighlight,
   },
   checkButton: {
     height: 32,
