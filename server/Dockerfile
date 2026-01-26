@@ -22,4 +22,4 @@ ENV NODE_ENV=production
 
 # Expose port and start
 EXPOSE 3000
-CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss && npm start"]
